@@ -1,0 +1,109 @@
+{
+  "name": "bull-master",
+  "description": "Bull queue UI for inspecting and manipulating jobs",
+  "version": "1.0.0",
+  "keywords": [
+    "bull",
+    "redis",
+    "queue",
+    "monitoring"
+  ],
+  "author": "Hans Li <lizihan0328@gmail.com>",
+  "contributors": [],
+  "main": "dist/index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hans-lizihan/bullmaster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hans-lizihan/bullmaster/issues"
+  },
+  "files": [
+    "server/**/*",
+    "static/**/*"
+  ],
+  "scripts": {
+    "lint": "eslint \"./src/**/*.js*\"",
+    "build": "yarn build:clean && yarn build:ui",
+    "build:publish": "yarn build",
+    "build:ui": "NODE_ENV=production webpack",
+    "build:clean": "rm -rf ./static ./dist",
+    "dev:server": "nodemon example.js",
+    "dev:client": "NODE_ENV=development webpack-dev-server --client-log-level warning --progress --port 4888",
+    "test": "NODE_ENV=test jest --coverage --collectCoverageFrom=**/*.{js,jsx}"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{css}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "yarn test"
+    }
+  },
+  "dependencies": {
+    "express": "4.17.1",
+    "react-hot-loader": "^4.12.19",
+    "redis-info": "^3.0.7"
+  },
+  "optionalDependencies": {
+    "bull": "^3.13.0",
+    "bullmq": "^1.8.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/core": "^8.3.5",
+    "@hot-loader/react-dom": "^16.12.0",
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/icons": "^4.9.1",
+    "axios": "^0.19.2",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-react-app": "^9.1.1",
+    "clsx": "^1.1.0",
+    "commitlint-config-gitmoji": "^1.0.1",
+    "css-loader": "^3.4.2",
+    "date-fns": "^2.10.0",
+    "enzyme": "^3.11.0",
+    "enzyme-to-json": "^3.4.4",
+    "eslint": "^5.16.0 || ^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.5.0",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "prettier-eslint": "^9.0.1",
+    "pretty-bytes": "^5.3.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.0",
+    "react-dev-utils": "^10.2.0",
+    "react-dom": "^16.13.0",
+    "react-highlight": "^0.12.0",
+    "react-redux": "^7.2.0",
+    "react-request-hook": "^2.1.1",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.5",
+    "style-loader": "^1.1.3",
+    "supertest": "^4.0.2",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
+    "webpack-manifest-plugin": "^2.2.0"
+  }
+}
