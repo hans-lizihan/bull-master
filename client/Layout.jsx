@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
@@ -57,7 +57,13 @@ export default function Layout({ children }) {
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            className={classes.title}
+          >
             Dashboard
           </Typography>
         </Toolbar>
@@ -77,4 +83,4 @@ export default function Layout({ children }) {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-}
+};

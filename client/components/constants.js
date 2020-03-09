@@ -6,7 +6,7 @@ export const STATUSES = {
   failed: 'failed',
   delayed: 'delayed',
   paused: 'paused',
-}
+};
 
 export const FIELDS = {
   active: ['attempts', 'data', 'id', 'name', 'opts', 'progress', 'timestamps'],
@@ -41,4 +41,4 @@ export const FIELDS = {
   latest: ['attempts', 'data', 'id', 'name', 'opts', 'progress', 'timestamps'],
   paused: ['attempts', 'data', 'id', 'name', 'opts', 'timestamps'],
   waiting: ['data', 'id', 'name', 'opts', 'timestamps'],
-}
+};

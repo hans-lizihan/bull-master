@@ -1,13 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import { hot } from 'react-hot-loader/root';
-import { ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import {RequestProvider} from 'react-request-hook';
-import client from './network/client'
+import { RequestProvider } from 'react-request-hook';
+import client from './network/client';
 import Layout from './Layout';
 import Dashboard from './pages/Dashboard';
-import theme from './theme'
+import theme from './theme';
 
 const App = ({ basePath }) => (
   <ThemeProvider theme={theme}>
@@ -25,6 +25,6 @@ const App = ({ basePath }) => (
 
 App.propTypes = {
   basePath: PropTypes.string.isRequired,
-}
+};
 
 export default hot(App);

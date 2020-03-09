@@ -1,15 +1,15 @@
-const { parse: parseRedisInfo } = require('redis-info')
+const { parse: parseRedisInfo } = require('redis-info');
 
 module.exports = async (req, res) => {
-  const { bullMasterQueues } = req.app.locals
-  const [ queue ] = Object.values(bullMasterQueues)
+  const { bullMasterQueues } = req.app.locals;
+  const [queue] = Object.values(bullMasterQueues);
 
   if (!queue) {
     return {};
   }
-  const redisClient = await queue.client
-  const redisInfoRaw = await redisClient.info()
-  const redisInfo = parseRedisInfo(redisInfoRaw)
+  const redisClient = await queue.client;
+  const redisInfoRaw = await redisClient.info();
+  const redisInfo = parseRedisInfo(redisInfoRaw);
 
   const {
     redis_version: redisVersion,
@@ -28,5 +28,5 @@ module.exports = async (req, res) => {
     connectedClients,
     blockedClients,
     totalSystemMemory: totalSystemMemory || maxmemory,
-  })
+  });
 };

@@ -1,75 +1,76 @@
-import { useEffect, useCallback, useRef, useState } from 'react'
-import qs from 'querystring'
+import { useEffect, useCallback, useRef, useState } from 'react';
+import qs from 'querystring';
 
-const interval = 5000
+const interval = 5000;
 
 export default function useStore(basePath) {
   const [state, setState] = useState({
     data: null,
     loading: true,
-  })
-  const [selectedStatuses, setSelectedStatuses] = useState({})
+  });
+  const [selectedStatuses, setSelectedStatuses] = useState({});
 
-  const poll = useRef()
+  const poll = useRef();
   const stopPolling = useCallback(() => {
     if (poll.current) {
-      clearTimeout(poll.current)
-      poll.current = undefined
+      clearTimeout(poll.current);
+      poll.current = undefined;
     }
-  }, [poll])
+  }, [poll]);
 
-  const update = useCallback(() =>
-    fetch(`${basePath}/queues/?${qs.encode(selectedStatuses)}`)
-      .then(res => (res.ok ? res.json() : Promise.reject(res)))
-      .then(data => setState({ data, loading: false }))
-  , [basePath, selectedStatuses, setState])
+  const update = useCallback(
+    () =>
+      fetch(`${basePath}/queues/?${qs.encode(selectedStatuses)}`)
+        .then(res => (res.ok ? res.json() : Promise.reject(res)))
+        .then(data => setState({ data, loading: false })),
+    [basePath, selectedStatuses, setState],
+  );
 
   const runPolling = useCallback(() => {
     update()
       .catch(error => console.error('Failed to poll', error))
       .then(() => {
-        const timeoutId = setTimeout(runPolling, interval)
-        poll.current = timeoutId
-      })
-  }, [poll, update])
+        const timeoutId = setTimeout(runPolling, interval);
+        poll.current = timeoutId;
+      });
+  }, [poll, update]);
 
   useEffect(() => {
-    stopPolling()
-    runPolling()
+    stopPolling();
+    runPolling();
 
-    return stopPolling
-  }, [selectedStatuses, runPolling, stopPolling])
+    return stopPolling;
+  }, [selectedStatuses, runPolling, stopPolling]);
 
-
-  const promoteJob = (queueName) => (job) => () =>
+  const promoteJob = queueName => job => () =>
     fetch(`${basePath}/queues/${queueName}/${job.id}/promote`, {
       method: 'put',
-    }).then(update)
+    }).then(update);
 
-  const retryJob = (queueName) => (job) => () =>
+  const retryJob = queueName => job => () =>
     fetch(`${basePath}/queues/${queueName}/${job.id}/retry`, {
       method: 'put',
-    }).then(update)
+    }).then(update);
 
-  const retryAll = (queueName) => () =>
+  const retryAll = queueName => () =>
     fetch(`${basePath}/queues/${queueName}/retry`, {
       method: 'put',
-    }).then(update)
+    }).then(update);
 
-  const cleanAllDelayed = (queueName) => () =>
+  const cleanAllDelayed = queueName => () =>
     fetch(`${basePath}/queues/${queueName}/clean/delayed`, {
       method: 'put',
-    }).then(update)
+    }).then(update);
 
-  const cleanAllFailed = (queueName) => () =>
+  const cleanAllFailed = queueName => () =>
     fetch(`${basePath}/queues/${queueName}/clean/failed`, {
       method: 'put',
-    }).then(update)
+    }).then(update);
 
-  const cleanAllCompleted = (queueName) => () =>
+  const cleanAllCompleted = queueName => () =>
     fetch(`${basePath}/queues/${queueName}/clean/completed`, {
       method: 'put',
-    }).then(update)
+    }).then(update);
 
   return {
     state,
@@ -81,5 +82,5 @@ export default function useStore(basePath) {
     cleanAllCompleted,
     selectedStatuses,
     setSelectedStatuses,
-  }
+  };
 }

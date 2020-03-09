@@ -1,5 +1,5 @@
 module.exports = (req, res) => {
-  const baseUrl = req.proxyUrl || req.baseUrl
+  const baseUrl = req.proxyUrl || req.baseUrl;
 
   res.end(`
 <!DOCTYPE html>
@@ -22,5 +22,5 @@ module.exports = (req, res) => {
     <script src="${baseUrl}/bundle.js"></script>
   </body>
 </html>
-`)
-}
+`);
+};

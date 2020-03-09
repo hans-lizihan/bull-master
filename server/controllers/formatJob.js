@@ -1,5 +1,5 @@
-module.exports = (job) => {
-  const jobProps = job.toJSON()
+module.exports = job => {
+  const jobProps = job.toJSON();
 
   return {
     id: jobProps.id,
@@ -14,6 +14,5 @@ module.exports = (job) => {
     opts: jobProps.opts,
     data: jobProps.data,
     name: jobProps.name,
-  }
-}
-
+  };
+};

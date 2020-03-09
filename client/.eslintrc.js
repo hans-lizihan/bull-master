@@ -27,9 +27,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error',
     'react/jsx-props-no-spreading': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
-    'import/no-extraneous-dependencies': [
-      'error',
-      { devDependencies: true },
-    ],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 };
