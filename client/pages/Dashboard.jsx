@@ -1,23 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { useResource } from 'react-request-hook';
 import RedisStats from '../components/RedisStats';
 import useInterval from '../hooks/useInterval';
 import QueueList from '../components/QueueList';
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-}));
+import Section from '../components/Section';
 
 const Dashboard = () => {
-  const classes = useStyles();
   const [stats, getStats] = useResource(() => ({
     url: '/redis-stats',
     method: 'GET',
@@ -31,22 +20,22 @@ const Dashboard = () => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <Paper className={classes.paper}>
+        <Section>
           <RedisStats stats={stats.data || {}} />
-        </Paper>
+        </Section>
       </Grid>
       <Grid item xs={12} md={6} lg={6}>
-        <Paper className={classes.paper}>
+        <Section>
           <div>Queue Summary here</div>
-        </Paper>
+        </Section>
       </Grid>
       <Grid item xs={12} md={6} lg={6}>
-        <Paper className={classes.paper}>
+        <Section>
           <div>This is a chart</div>
-        </Paper>
+        </Section>
       </Grid>
       <Grid item xs={12}>
-        <QueueList queues={queues.data?.queues || []} />
+        <QueueList queues={queues.data?.data || []} />
       </Grid>
     </Grid>
   );

@@ -14,10 +14,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hans-lizihan/bullmaster.git"
+    "url": "https://github.com/hans-lizihan/bull-master.git"
   },
   "bugs": {
-    "url": "https://github.com/hans-lizihan/bullmaster/issues"
+    "url": "https://github.com/hans-lizihan/bull-master/issues"
   },
   "files": [
     "server/**/*",
@@ -27,10 +27,10 @@
     "lint": "eslint client/**/*.{js,jsx} server/**/*.js && commitlint ci",
     "build": "yarn build:clean && yarn build:ui",
     "build:publish": "yarn build",
-    "build:ui": "NODE_ENV=production webpack",
+    "build:ui": "NODE_ENV=production webpack --hide-modules",
     "build:clean": "rm -rf ./static ./dist",
     "dev:server": "nodemon example.js",
-    "dev:client": "NODE_ENV=development webpack-dev-server --client-log-level warning --progress --port 4888",
+    "dev:client": "NODE_ENV=development webpack-dev-server --hot --client-log-level warning --progress --port 4888",
     "test": "NODE_ENV=test jest --coverage --collectCoverageFrom=**/*.{js,jsx}"
   },
   "lint-staged": {

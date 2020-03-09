@@ -1,10 +1,12 @@
-const path = require('path')
-const webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  bail: true,
-  devtool: process.env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : 'source-map',
+  devtool:
+    process.env.NODE_ENV === 'development'
+      ? 'cheap-module-eval-source-map'
+      : false,
 
   entry: ['./client/index.jsx'],
   output: {
@@ -14,7 +16,7 @@ module.exports = {
     hot: true,
     quiet: false,
     contentBase: path.join(__dirname, '../static'),
-    publicPath: '/ui',
+    publicPath: '/ui/',
     stats: {
       colors: true,
       modules: false,
@@ -34,13 +36,12 @@ module.exports = {
     },
   },
   plugins: [
-     process.env.NODE_ENV === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
-     new webpack.DefinePlugin({
+    new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-  ],
+  ].filter(p => !!p),
   module: {
     rules: [
       {
@@ -53,5 +54,5 @@ module.exports = {
         loader: 'babel-loader',
       },
     ],
-  }
-}
+  },
+};

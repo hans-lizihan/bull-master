@@ -16,7 +16,6 @@ module.exports = (req, res) => {
   <body>
     <div id="root">Loading...</div>
     <script>
-      ___webpack_public_path__ = '${baseUrl}';
       window.basePath = '${baseUrl}'
     </script>
     <script src="${baseUrl}/bundle.js"></script>

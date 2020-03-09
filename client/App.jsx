@@ -7,6 +7,7 @@ import { RequestProvider } from 'react-request-hook';
 import client from './network/client';
 import Layout from './Layout';
 import Dashboard from './pages/Dashboard';
+import Queue from './pages/Queue';
 import theme from './theme';
 
 const App = ({ basePath }) => (
@@ -16,6 +17,7 @@ const App = ({ basePath }) => (
         <Layout>
           <Switch>
             <Route exact path="/" component={Dashboard} />
+            <Route exact path="/queues/:queueName" component={Queue} />
           </Switch>
         </Layout>
       </Router>

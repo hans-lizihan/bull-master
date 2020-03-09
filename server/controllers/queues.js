@@ -1,11 +1,4 @@
-const statuses = [
-  'active',
-  'completed',
-  'delayed',
-  'failed',
-  'paused',
-  'waiting',
-];
+const { STATUSES } = require('./constants');
 
 module.exports = async (req, res) => {
   const { bullMasterQueues } = req.app.locals;
@@ -17,7 +10,7 @@ module.exports = async (req, res) => {
 
   const queues = await Promise.all(
     pairs.map(async ([name, queue]) => {
-      const counts = await queue.getJobCounts(...statuses);
+      const counts = await queue.getJobCounts(...STATUSES);
 
       return {
         name,
@@ -27,6 +20,6 @@ module.exports = async (req, res) => {
   );
 
   return res.json({
-    queues,
+    data: queues,
   });
 };
