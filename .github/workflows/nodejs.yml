@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - run: yarn
+      - run: yarn --pure-lockfile
       - run: yarn lint
 
   ####### Unit tests
@@ -60,9 +60,14 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn
+      - run: yarn --pure-lockfile
       - run: yarn build
       - run: yarn test
+        env:
+          # The hostname used to communicate with the Redis service container
+          REDIS_HOST: redis
+          # The default Redis port
+          REDIS_PORT: 6379
 
   ####### Publish to npm
   npm_publish:

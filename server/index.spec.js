@@ -7,8 +7,8 @@ describe('happy', () => {
   it('should be able to set queue', async () => {
     const paintQueue = new Queue('Paint', {
       connection: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST || 'localhost',
+        port: process.env.REDIS_PORT || 6379,
       },
     });
 
