@@ -10,9 +10,9 @@ import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   chip: {
-    background: theme.palette.common.white,
+    background: 'transparent',
   },
   active: {
     background: purple[100],
