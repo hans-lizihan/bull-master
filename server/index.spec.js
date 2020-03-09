@@ -21,7 +21,7 @@ describe('happy', () => {
       .then(res => {
         expect(JSON.parse(res.text)).toMatchInlineSnapshot(`
           Object {
-            "queues": Array [
+            "data": Array [
               Object {
                 "counts": Object {
                   "active": 0,
