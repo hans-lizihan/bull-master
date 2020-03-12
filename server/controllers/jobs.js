@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   const { queueName } = req.params;
   const { status, page: pageString, pageSize: pageSizeString } =
     req.query || {};
-  const page = Math.max(parseInt(pageString || 1, 10) - 1, 0);
+  const page = Math.max(parseInt(pageString || 0, 10), 0);
   const pageSize = parseInt(pageSizeString || 20, 10);
   const queue = bullMasterQueues[queueName];
   const counts = await queue.getJobCounts(status);

@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(() => ({
   chip: {
     background: 'transparent',
+    cursor: 'inherit',
   },
   active: {
     background: purple[100],
