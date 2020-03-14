@@ -6,13 +6,10 @@ module.exports = job => {
     timestamp: jobProps.timestamp,
     processedOn: jobProps.processedOn,
     finishedOn: jobProps.finishedOn,
+    delayedTo: parseInt(jobProps.timestamp, 10) + parseInt(job.opts.delay, 10),
     progress: jobProps.progress,
-    attempts: jobProps.attemptsMade,
-    delay: job.opts.delay,
-    failedReason: jobProps.failedReason,
-    stacktrace: jobProps.stacktrace,
-    opts: jobProps.opts,
-    data: jobProps.data,
+    attemptsMade: jobProps.attemptsMade,
+    attemptsTotal: job.opts.attempts,
     name: jobProps.name,
   };
 };

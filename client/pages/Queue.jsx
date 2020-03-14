@@ -1,55 +1,92 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { useResource, useRequest } from 'react-request-hook';
-import Table from 'material-table';
+import { useResource } from 'react-request-hook';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Link as RouterLink } from 'react-router-dom';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Link from '@material-ui/core/Link';
 import { formatISO, formatDistance } from 'date-fns';
 import StatusTabs from './StatusTabs';
 import useInterval from '../hooks/useInterval';
+import Table from '../components/Table';
 
 const FIELDS = {
-  active: ['id', 'attempts', 'name', 'progress', 'processedOn'],
-  completed: ['id', 'attempts', 'data', 'name', 'finishedOn', 'processedOn'],
-  delayed: ['id', 'attempts', 'data', 'delay', 'name', 'promote'],
-  failed: ['id', 'attempts', 'name', 'progress', 'finishedOn'],
-  paused: ['id', 'attempts', 'name', 'processedOn'],
-  waiting: ['id', 'data', 'name', 'processedOn'],
+  active: ['id', 'name', 'progress', 'timestamp', 'processedOn', 'actions'],
+  completed: [
+    'id',
+    'name',
+    'finishedOn',
+    'timestamp',
+    'processedOn',
+    'actions',
+  ],
+  delayed: ['id', 'name', 'attempts', 'timestamp', 'delayedTo', 'actions'],
+  failed: ['id', 'attempts', 'name', 'progress', 'finishedOn', 'actions'],
+  paused: ['id', 'name', 'timestamp', 'processedOn', 'actions'],
+  waiting: ['id', 'name', 'timestamp', 'actions'],
 };
 
 const Queue = ({ match, history, location }) => {
-  const tableRef = useRef();
   const [queue, getQueue] = useResource(() => ({
     url: `/queues/${match.params.queueName}`,
     method: 'GET',
   }));
   useInterval(getQueue, 4000);
-  const [getJobsRequest, getJobs] = useRequest(
-    ({ page, pageSize, status }) => ({
-      url: `/queues/${match.params.queueName}/jobs?status=${status}&pageSize=${pageSize}&page=${page}`,
-      method: 'GET',
-    }),
-  );
-  const status = new URLSearchParams(location.search).get('status') || 'active';
+  const [jobs, getJobs] = useResource(({ page, pageSize, status }) => ({
+    url: `/queues/${match.params.queueName}/jobs?status=${status}&pageSize=${pageSize}&page=${page}`,
+    method: 'GET',
+  }));
+  const query = new URLSearchParams(location.search);
+  const status = query.get('status') || 'active';
+  const page = parseInt(query.get('page') || 0, 10);
+  const pageSize = parseInt(query.get('pageSize') || 5, 10);
   const refreshTable = () => {
-    if (tableRef.current) {
-      if (getJobsRequest.hasPending) {
-        getJobsRequest.clear();
-      }
-      tableRef.current.onQueryChange();
-    }
+    const newQuery = new URLSearchParams(location.search);
+    const newStatus = newQuery.get('status') || 'active';
+    const newPage = parseInt(newQuery.get('page') || 0, 10);
+    const newPageSize = parseInt(newQuery.get('pageSize') || 5, 10);
+    getJobs({
+      page: newPage,
+      pageSize: newPageSize,
+      status: newStatus,
+    });
   };
   useInterval(refreshTable, 4000);
   const handleStatusChange = (event, newValue) => {
-    const params = new URLSearchParams(location.search);
-    params.set('status', newValue);
-    history.push(`${location.pathname}?${params.toString()}`);
-    refreshTable();
+    const newQuery = new URLSearchParams(location.search);
+    newQuery.set('status', newValue);
+    getJobs({
+      page,
+      pageSize,
+      status: newValue,
+    });
+    history.push(`${location.pathname}?${newQuery.toString()}`);
+  };
+
+  const handleChangePage = (e, newPage) => {
+    const newQuery = new URLSearchParams(location.search);
+    newQuery.set('page', newPage);
+    getJobs({
+      page: newPage,
+      pageSize,
+      status,
+    });
+    history.push(`${location.pathname}?${newQuery.toString()}`);
+  };
+  const handleChangeRowsPerPage = e => {
+    const newQuery = new URLSearchParams(location.search);
+    newQuery.set('pageSize', e.target.value);
+    getJobs({
+      page,
+      pageSize: e.target.value,
+      status,
+    });
+    history.push(`${location.pathname}?${newQuery.toString()}`);
   };
 
   const { name, counts } = queue.data || {};
@@ -74,83 +111,93 @@ const Queue = ({ match, history, location }) => {
       <Grid item xs={12}>
         <Table
           title={name}
-          tableRef={tableRef}
+          page={page}
+          onChangePage={handleChangePage}
           columns={[
             { title: 'ID', field: 'id' },
             { title: 'Job Name', field: 'name' },
             {
+              title: 'Created At',
+              field: 'timestamp',
+              render: value =>
+                value && (
+                  <Tooltip
+                    placement="top"
+                    title={`${formatDistance(value, Date.now())} ago`}
+                  >
+                    <span>{formatISO(value)}</span>
+                  </Tooltip>
+                ),
+            },
+            {
               title: 'Started At',
               field: 'processedOn',
-              render: field =>
-                field.processedOn && (
-                  <Tooltip title={formatISO(field.processedOn)}>
-                    <span>
-                      {formatDistance(field.processedOn, Date.now())} ago
-                    </span>
+              render: value =>
+                value && (
+                  <Tooltip placement="top" title={formatISO(value)}>
+                    <span>{formatDistance(value, Date.now())} ago</span>
                   </Tooltip>
                 ),
             },
             {
               title: 'Completed At',
               field: 'finishedOn',
-              render: field =>
-                field.finishedOn && (
-                  <Tooltip title={formatISO(field.finishedOn)}>
-                    <span>
-                      {formatDistance(field.finishedOn, Date.now())} ago
-                    </span>
+              render: value =>
+                value && (
+                  <Tooltip placement="top" title={formatISO(value)}>
+                    <span>{formatDistance(value, Date.now())} ago</span>
+                  </Tooltip>
+                ),
+            },
+            {
+              title: 'Delayed To',
+              field: 'delayedTo',
+              render: value =>
+                value && (
+                  <Tooltip placement="top" title={formatISO(value)}>
+                    <span>{formatDistance(value, Date.now())} later</span>
                   </Tooltip>
                 ),
             },
             {
               title: 'Progress',
               field: 'progress',
-              render: field => (
-                <Tooltip title={`${field.progress}%`}>
-                  <LinearProgress
-                    variant="determinate"
-                    value={field.progress}
-                  />
+              render: value => (
+                <Tooltip placement="top" title={`${value}%`}>
+                  <LinearProgress variant="determinate" value={value} />
                 </Tooltip>
               ),
             },
             {
               title: 'Attempts',
               field: 'attempts',
-              render: field => field.opts.attempts,
+              render: (val, field) => field.attemptsMade,
+            },
+            {
+              title: 'Actions',
+              field: 'actions',
+              render: (val, field) => (
+                <Button
+                  size="small"
+                  component={RouterLink}
+                  startIcon={<VisibilityIcon />}
+                  to={`${location.pathname}/${field.id}`}
+                >
+                  Details
+                </Button>
+              ),
             },
           ].filter(column => FIELDS[status].includes(column.field))}
-          options={{
-            search: false,
-            pageSize: parseInt(
-              new URLSearchParams(location.search).get('pageSize') || 5,
-              10,
-            ),
-            pageSizeOptions: [5, 20, 50, 100],
-          }}
-          components={{
-            OverlayLoading: () => null,
-          }}
-          data={query => {
-            const { page, pageSize } = query;
-            const search = new URLSearchParams({
-              status,
-              page,
-              pageSize,
-            });
-            history.push(`${location.pathname}?${search.toString()}`);
-            const { ready } = getJobs({
-              status,
-              page: query.page,
-              pageSize: query.pageSize,
-            });
-            return ready().catch(e => {
-              if (!e.isCancel) {
-                console.error(e);
-              }
-              return e;
-            });
-          }}
+          rowsPerPage={pageSize}
+          pageSizeOptions={[5, 20, 50, 100]}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          totalCount={jobs.data?.totalCount}
+          actions={[
+            <Button>Promote</Button>,
+            <Button>Promote</Button>,
+            <Button>Promote</Button>,
+          ]}
+          data={jobs.data?.data || []}
         />
       </Grid>
     </Grid>

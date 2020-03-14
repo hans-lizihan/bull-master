@@ -182,9 +182,6 @@ export default function EnhancedTable({
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -218,7 +215,7 @@ export default function EnhancedTable({
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.name}
+                    key={row.id}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
@@ -229,17 +226,12 @@ export default function EnhancedTable({
                     </TableCell>
                     {columns.map(({ render, field, ...rest }) => (
                       <TableCell key={field} {...rest}>
-                        {render ? render(row[field], row) : row[field]}
+                        {render ? render(row[field || ''], row) : row[field]}
                       </TableCell>
                     ))}
                   </TableRow>
                 );
               })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
