@@ -1,21 +1,7 @@
-# bull-board 🎯
+# bull master
 
 Bull Dashboard is a UI built on top of [Bull](https://github.com/OptimalBits/bull) to help you visualize your queues and their jobs.
 With this library you get a beautiful UI for visualizing what's happening with each job in your queues, their status and some actions that will enable you to get the jobs done.
-
-<p align="center">
-  <a href="https://www.npmjs.com/package/bull-board">
-    <img alt="npm downloads" src="https://img.shields.io/npm/dw/bull-board">
-  </a>
-  <a href="https://github.com/vcapretz/bull-board/blob/master/LICENSE">
-    <img alt="licence" src="https://img.shields.io/github/license/vcapretz/bull-board">
-  </a>
-  <a href="https://snyk.io/test/github/vcapretz/bull-board">
-    <img alt="snyk" src="https://snyk.io/test/github/vcapretz/bull-board/badge.svg">
-  </a>
-<p>
-
-![UI](https://raw.githubusercontent.com/vcapretz/bull-board/master/shot.png)
 
 ## Notes
 
@@ -33,13 +19,13 @@ If you want to learn more about queues and Redis: https://redis.io/.
 To add it to your project start by adding the library to your dependencies list:
 
 ```sh
-yarn add bull-board
+yarn add bull-master
 ```
 
 Or
 
 ```sh
-npm i bull-board
+npm i bull-master
 ```
 
 ## Hello World
@@ -48,22 +34,14 @@ The first step is to let bull-board know the queues you have already set up, to 
 
 ```js
 const Queue = require('bull')
-const { setQueues } = require('bull-board')
+const bullMaster = require('bull-master')
 
 const someQueue = new Queue()
 const someOtherQueue = new Queue()
 
-setQueues([someQueue, someOtherQueue])
-```
-
-You can then add `UI` to your middlewares (this can be set up using an admin endpoint with some authentication method):
-
-```js
-const app = require('express')()
-const { UI } = require('bull-board')
-
-app.use('/admin/queues', UI)
-
+app.use('/admin/queues', bullMaster({
+  queues: [someQueue, someOtherQueue],
+}))
 // other configurations for your server
 ```
 
@@ -73,11 +51,11 @@ That's it! Now you can access the `/admin/queues` route and you will be able to 
 
 First of all, thank you for being interested in helping out, your time is always appreciated in every way. 💯
 
-Remember to read the [Code of Conduct](https://github.com/vcapretz/bull-board/blob/master/CODE_OF_CONDUCT.md) so you also help maintaining a good Open source community around this project!
+Remember to read the [Code of Conduct](https://github.com/hans-lizihan/bull-master/blob/master/CODE_OF_CONDUCT.md) so you also help maintaining a good Open source community around this project!
 
 Here's some tips:
 
-- Check the [issues page](https://github.com/vcapretz/bull-board/issues) for already opened issues (or maybe even closed ones) that might already address your question/bug/feature request.
+- Check the [issues page](https://github.com/hans-lizihan/bull-master/issues) for already opened issues (or maybe even closed ones) that might already address your question/bug/feature request.
 - When opening a bug report provide as much information as you can, some things might be useful for helping debugging and understading the problem
   - Node, Redis, Bull, bull-board versions
   - Sample code that reproduces the problem
@@ -94,29 +72,32 @@ To fork a project means you're going to have your own version of it under your o
 Cloning a project means downloading it to your local machine, you do it in the command line:
 
 ```sh
-git clone git@github.com:YOUR_GITHUB_USERNAME/bull-board.git
+git clone git@github.com:YOUR_GITHUB_USERNAME/bull-master.git
 ```
 
-That will create a `bull-board` folder inside the directory you executed the command, so you need to navigate inside it:
+That will create a `bull-master` folder inside the directory you executed the command, so you need to navigate inside it:
 
 ```sh
-cd bull-board
+cd bull-master
 ```
 
 _This project requires that you have [yarn](https://yarnpkg.com/lang/en/) installed_
 
-Also make sure you are running Redis for this project (bull-board's example connects to Redis' default port 6379).
+Also make sure you are running Redis for this project (bull-master's example connects to Redis' default port 6379).
 
 Now, to try it out locally you can run:
 
 ```sh
-yarn && yarn start:dev
+yarn --pure-lockfile 
+yarn dev:client 
+yarn dev:server
 ```
 
 ### Acknowledgements ❤️
 
 - [Juan](https://github.com/joaomilho) for building the first version of this library
+- [Vitor](https://github.com/vcapretz) this project is basically a radical rewrite from Vitor's [bull-board](https://github.com/vcapretz/bull-board) project
 
 # License
 
-This project is licensed under the [MIT License](https://github.com/vcapretz/bull-board/blob/master/LICENSE), so it means it's completely free to use and copy, but if you do fork this project with nice additions that we could have here, remember to send a PR 👍
+This project is licensed under the [MIT License](https://github.com/hans-lizihan/bull-master/blob/master/LICENSE), so it means it's completely free to use and copy, but if you do fork this project with nice additions that we could have here, remember to send a PR 👍
