@@ -16,8 +16,8 @@ Radical rewrite from bull-board project
 * Allow customized configuration for setting headers in the frontend
 
 ###  Project Structure
-* Remove typescript (for such small project, typescript is a kinda overengineering, and it's tedio to fighting type corecing)
-* Seperate server and client folder to configure different rules for eslint
+* Remove typescript (for such small project, typescript is a kinda over-engineering, and it's tedious to fighting type coercing)
+* Separate server and client folder to configure different rules for eslint
 * Refactored the entry point for the app as a middleware-ish format, ditched `setQueue` style api
 * Refactored API to match frontend list-detail structure
 
@@ -25,8 +25,8 @@ Radical rewrite from bull-board project
 * Removed dependency of ejs in favor of inline js template
 * Use gitmoji as commit linter
 * Automatically format code via lint-staged and prettier
-* Intruduced testing for frontend (enzyme)
-* Adpated eslint-config-airbnb
+* Introduced testing for frontend (enzyme)
+* Adapted eslint-config-airbnb
 * Enable react-hot-loader for better frontend dev experiences
 * Use good old prop-types for prop validation in react
 

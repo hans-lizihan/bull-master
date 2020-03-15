@@ -143,10 +143,12 @@ const Queue = ({ match, history, location }) => {
               title: 'Completed At',
               field: 'finishedOn',
               render: value =>
-                value && (
+                value ? (
                   <Tooltip placement="top" title={formatISO(value)}>
                     <span>{formatDistance(value, Date.now())} ago</span>
                   </Tooltip>
+                ) : (
+                  'Not completed'
                 ),
             },
             {
@@ -193,10 +195,10 @@ const Queue = ({ match, history, location }) => {
           onChangeRowsPerPage={handleChangeRowsPerPage}
           totalCount={jobs.data?.totalCount}
           actions={[
-            <Button>Promote</Button>,
-            <Button>Promote</Button>,
-            <Button>Promote</Button>,
-          ]}
+            status === 'delayed' && <Button key="promote">Promote</Button>,
+            <Button key="Remove">Remove</Button>,
+            status === 'failed' && <Button key="retry">Retry</Button>,
+          ].filter(b => b)}
           data={jobs.data?.data || []}
         />
       </Grid>

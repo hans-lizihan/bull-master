@@ -151,6 +151,7 @@ export default function EnhancedTable({
   const classes = useStyles();
   const [selected, setSelected] = React.useState([]);
 
+  // TODO: move selected countrol outside
   const handleSelectAllClick = event => {
     if (event.target.checked) {
       const newSelecteds = data.map(n => n.id);
