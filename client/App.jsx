@@ -8,6 +8,7 @@ import client from './network/client';
 import Layout from './Layout';
 import Dashboard from './pages/Dashboard';
 import Queue from './pages/Queue';
+import Job from './pages/Job';
 import theme from './theme';
 
 const App = ({ basePath }) => (
@@ -18,6 +19,7 @@ const App = ({ basePath }) => (
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/queues/:queueName" component={Queue} />
+            <Route exact path="/queues/:queueName/:jobId" component={Job} />
           </Switch>
         </Layout>
       </Router>

@@ -27,6 +27,7 @@ const run = () => {
     for (let i = 0; i <= 100; i += 1) {
       await sleep(Math.random());
       job.progress(i);
+      await job.log(`logging for ${i}`);
       if (Math.random() * 200 < 1) throw new Error(`Random error ${i}`);
     }
   });
@@ -36,6 +37,7 @@ const run = () => {
     for (let i = 0; i <= 100; i += 1) {
       await sleep(Math.random());
       await job.updateProgress(i);
+      await job.log(`logging for ${i}`);
 
       if (Math.random() * 200 < 1) throw new Error(`Random error ${i}`);
     }

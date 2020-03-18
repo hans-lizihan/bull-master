@@ -9,6 +9,7 @@ const cleanAll = require('./controllers/cleanAll');
 const render = require('./controllers/render');
 const redisStats = require('./controllers/redisStats');
 const jobs = require('./controllers/jobs');
+const job = require('./controllers/job');
 const queueHandler = require('./controllers/queue');
 
 const wrapAsync = fn => (req, res, next) =>
@@ -36,10 +37,12 @@ module.exports = ({ queues }) => {
 
     .get('/', render)
     .get('/queues/:queueName', render)
+    .get('/queues/:queueName/:jobId', render)
     .get('/api/redis-stats', wrapAsync(redisStats))
     .get('/api/queues', wrapAsync(queuesHandler))
     .get('/api/queues/:queueName', wrapAsync(queueHandler))
     .get('/api/queues/:queueName/jobs', wrapAsync(jobs))
+    .get('/api/queues/:queueName/jobs/:jobId', wrapAsync(job))
     .post('/api/queues/:queueName/retries', wrapAsync(retryJob))
     .post('/api/queues/:queueName/promotes', wrapAsync(promoteJob))
     .post('/api/queues/:queueName/cleans', wrapAsync(cleanAll));
