@@ -1,11 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const path = require('path');
 const { Queue: QueueMq } = require('bullmq');
 
 const queuesHandler = require('./controllers/queues');
 const retryJob = require('./controllers/retryJob');
 const promoteJob = require('./controllers/promoteJob');
-const cleanAll = require('./controllers/cleanAll');
+const removeJobs = require('./controllers/removeJobs');
 const render = require('./controllers/render');
 const redisStats = require('./controllers/redisStats');
 const jobs = require('./controllers/jobs');
@@ -33,6 +34,7 @@ module.exports = ({ queues }) => {
       }
       return next();
     })
+    .use(bodyParser.json())
     .use('/', express.static(path.resolve(__dirname, '../static')))
 
     .get('/', render)
@@ -45,5 +47,5 @@ module.exports = ({ queues }) => {
     .get('/api/queues/:queueName/jobs/:jobId', wrapAsync(job))
     .post('/api/queues/:queueName/retries', wrapAsync(retryJob))
     .post('/api/queues/:queueName/promotes', wrapAsync(promoteJob))
-    .post('/api/queues/:queueName/cleans', wrapAsync(cleanAll));
+    .post('/api/queues/:queueName/removes', wrapAsync(removeJobs));
 };

@@ -6,11 +6,11 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import { Link as RouterLink } from 'react-router-dom';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Link from '@material-ui/core/Link';
 import { formatISO, formatDistance } from 'date-fns';
+import CircularProgress from '../components/CircularProgress';
 import StatusTabs from './StatusTabs';
 import useInterval from '../hooks/useInterval';
 import Table from '../components/Table';
@@ -164,11 +164,7 @@ const Queue = ({ match, history, location }) => {
             {
               title: 'Progress',
               field: 'progress',
-              render: value => (
-                <Tooltip placement="top" title={`${value}%`}>
-                  <LinearProgress variant="determinate" value={value} />
-                </Tooltip>
-              ),
+              render: value => <CircularProgress size={48} value={value} />,
             },
             {
               title: 'Attempts',

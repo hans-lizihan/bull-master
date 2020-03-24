@@ -8,6 +8,7 @@ import orange from '@material-ui/core/colors/orange';
 import lightBlue from '@material-ui/core/colors/lightBlue';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -39,14 +40,29 @@ const ucFirst = str => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const Status = ({ status, count }) => {
+const hasCount = count => {
+  if (!count && count !== 0) {
+    return false;
+  }
+  return true;
+};
+
+const Status = ({ status, count, ...rest }) => {
   const classes = useStyles();
 
   return (
     <Chip
-      className={classes.chip}
+      className={clsx({
+        [classes.chip]: hasCount(count),
+        [classes[status]]: !hasCount(count),
+      })}
       label={ucFirst(status)}
-      avatar={<Avatar className={classes[status]}>{count}</Avatar>}
+      avatar={
+        hasCount(count) ? (
+          <Avatar className={classes[status]}>{count}</Avatar>
+        ) : null
+      }
+      {...rest}
     />
   );
 };
@@ -60,11 +76,12 @@ Status.propTypes = {
     'failed',
     'paused',
     'waiting',
-  ]).isRequired,
+  ]),
 };
 
 Status.defaultProps = {
-  count: 0,
+  count: null,
+  status: 'completed',
 };
 
 export default Status;

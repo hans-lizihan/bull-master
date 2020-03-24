@@ -1,7 +1,7 @@
 const promoteJob = async (req, res) => {
   const { bullMasterQueues } = req.app.locals;
-  const { queueName, id } = req.params;
-  const { queue } = bullMasterQueues[queueName];
+  const { queueName } = req.params;
+  const queue = bullMasterQueues[queueName];
 
   if (!queue) {
     return res.status(404).send({
@@ -9,15 +9,11 @@ const promoteJob = async (req, res) => {
     });
   }
 
-  const job = await queue.getJob(id);
+  const jobs = await Promise.all(
+    req.body.jobs.map(jobId => queue.getJob(jobId)),
+  );
 
-  if (!job) {
-    return res.status(404).send({
-      error: 'Job not found',
-    });
-  }
-
-  await job.promote();
+  await Promise.all(jobs.map(job => job.promote()));
 
   return res.sendStatus(204);
 };

@@ -1,6 +1,6 @@
 module.exports = async (req, res) => {
   const { bullMasterQueues } = req.app.locals;
-  const { queueName, id } = req.params;
+  const { queueName } = req.params;
   const queue = bullMasterQueues[queueName];
 
   if (!queue) {
@@ -9,15 +9,11 @@ module.exports = async (req, res) => {
     });
   }
 
-  const job = await queue.getJob(id);
+  const jobs = await Promise.all(
+    req.body.jobs.map(jobId => queue.getJob(jobId)),
+  );
 
-  if (!job) {
-    return res.status(404).send({
-      error: 'Job not found',
-    });
-  }
-
-  await job.retry();
+  await Promise.all(jobs.map(job => job.retry()));
 
   return res.sendStatus(204);
 };
