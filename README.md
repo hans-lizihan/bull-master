@@ -33,8 +33,10 @@ npm i bull-master
 The first step is to let bull-board know the queues you have already set up, to do so we use the `setQueues` method.
 
 ```js
+const express = require('express')
 const Queue = require('bull')
 const bullMaster = require('bull-master')
+const app = express()
 
 const someQueue = new Queue()
 const someOtherQueue = new Queue()

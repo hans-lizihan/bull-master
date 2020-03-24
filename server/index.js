@@ -16,7 +16,7 @@ const queueHandler = require('./controllers/queue');
 const wrapAsync = fn => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);
 
-module.exports = ({ queues }) => {
+module.exports = ({ queues, prefix }) => {
   const app = express();
   app.locals.bullMasterQueues = queues.reduce((acc, queue) => {
     const name = queue instanceof QueueMq ? queue.toKey('~') : queue.name;
@@ -24,19 +24,9 @@ module.exports = ({ queues }) => {
     return acc;
   }, {});
 
-  return app
-    .use((err, req, res, next) => {
-      if (err) {
-        return res.status(500).send({
-          error: 'queue error',
-          details: err.stack,
-        });
-      }
-      return next();
-    })
-    .use(bodyParser.json())
+  const router = express.Router();
+  router
     .use('/', express.static(path.resolve(__dirname, '../static')))
-
     .get('/', render)
     .get('/queues/:queueName', render)
     .get('/queues/:queueName/:jobId', render)
@@ -48,4 +38,31 @@ module.exports = ({ queues }) => {
     .post('/api/queues/:queueName/retries', wrapAsync(retryJob))
     .post('/api/queues/:queueName/promotes', wrapAsync(promoteJob))
     .post('/api/queues/:queueName/removes', wrapAsync(removeJobs));
+
+  app
+    .use((err, req, res, next) => {
+      if (err) {
+        return res.status(500).send({
+          error: 'queue error',
+          details: err.stack,
+        });
+      }
+      return next();
+    })
+    .use(bodyParser.json());
+
+  if (prefix) {
+    app.use(prefix, router);
+  } else {
+    app.use(router);
+  }
+  return app;
+};
+
+module.exports.koa = ({ queues, prefix }) => ctx => {
+  if (ctx.status === 404 || ctx.status === '404') {
+    delete ctx.res.statusCode;
+  }
+  ctx.respond = false;
+  return module.exports({ queues, prefix })(ctx.req, ctx.res);
 };

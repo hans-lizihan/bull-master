@@ -93,11 +93,15 @@ const Job = ({ match, history }) => {
   }, 4000);
   const [isRemoving, setRemove] = useState(false);
 
+  const stacktrace = job.data?.stacktrace || [];
+  const logs = job.data?.logs || [];
+  const status = job.data?.status || 'active';
+
   const handleRemove = () => {
     setRemove(true);
     createRemoveRequest({ jobId, queueName })
       .ready()
-      .then(() => history.push(`/queues/${queueName}`));
+      .then(() => history.push(`/queues/${queueName}?status=${status}`));
   };
   const handlePromote = () => {
     promoteJob({ jobId, queueName });
@@ -107,9 +111,6 @@ const Job = ({ match, history }) => {
     retryJob({ jobId, queueName });
     getJob({ jobId });
   };
-
-  const stacktrace = job.data?.stacktrace || [];
-  const logs = job.data?.logs || [];
 
   return (
     <Grid container spacing={3}>
@@ -146,50 +147,56 @@ const Job = ({ match, history }) => {
               className={classes.actions}
               justify="flex-end"
             >
-              <div
-                disabled={retryJobResponse.isLoading}
-                className={classes.buttonContainer}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.retry}
-                  onClick={handleRetry}
+              {status === 'failed' && (
+                <div
+                  disabled={retryJobResponse.isLoading}
+                  className={classes.buttonContainer}
                 >
-                  Retry
-                </Button>
-                {retryJobResponse.isLoading && (
-                  <MuiCircularProgress size={24} className={classes.loader} />
-                )}
-              </div>
-              <div disabled={isRemoving} className={classes.buttonContainer}>
-                <Button
-                  className={classes.remove}
-                  variant="contained"
-                  onClick={handleRemove}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.retry}
+                    onClick={handleRetry}
+                  >
+                    Retry
+                  </Button>
+                  {retryJobResponse.isLoading && (
+                    <MuiCircularProgress size={24} className={classes.loader} />
+                  )}
+                </div>
+              )}
+              {['failed', 'completed'].includes(status) && (
+                <div disabled={isRemoving} className={classes.buttonContainer}>
+                  <Button
+                    className={classes.remove}
+                    variant="contained"
+                    onClick={handleRemove}
+                  >
+                    Remove
+                  </Button>
+                  {isRemoving && (
+                    <MuiCircularProgress size={24} className={classes.loader} />
+                  )}
+                </div>
+              )}
+              {status === 'delayed' && (
+                <div
+                  disabled={promoteJobResponse.isLoading}
+                  className={classes.buttonContainer}
                 >
-                  Remove
-                </Button>
-                {isRemoving && (
-                  <MuiCircularProgress size={24} className={classes.loader} />
-                )}
-              </div>
-              <div
-                disabled={promoteJobResponse.isLoading}
-                className={classes.buttonContainer}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.promote}
-                  onClick={handlePromote}
-                >
-                  Promote
-                </Button>
-                {promoteJobResponse.isLoading && (
-                  <MuiCircularProgress size={24} className={classes.loader} />
-                )}
-              </div>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.promote}
+                    onClick={handlePromote}
+                  >
+                    Promote
+                  </Button>
+                  {promoteJobResponse.isLoading && (
+                    <MuiCircularProgress size={24} className={classes.loader} />
+                  )}
+                </div>
+              )}
             </Grid>
           </Grid>
           <Grid container style={{ marginBottom: 16 }} alignItems="center">

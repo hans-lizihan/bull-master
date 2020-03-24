@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0] - 2020-03-08
+## [1.0.0] - 2020-03-24
 
 Radical rewrite from bull-board project
 
@@ -9,11 +9,9 @@ Radical rewrite from bull-board project
 * Dashboard for overviewing redis status and queue statuses
 * Pie chart for presenting total success job / failed jobs
 * Detail page for each queue
-* Batch action for selected jobs in the view
 * Pagination for each of the queue and each statuses
 * Detail view for Job details view
 * Move error stack from Jobs list to Job detail view
-* Allow customized configuration for setting headers in the frontend
 
 ###  Project Structure
 * Remove typescript (for such small project, typescript is a kinda over-engineering, and it's tedious to fighting type coercing)
@@ -25,7 +23,6 @@ Radical rewrite from bull-board project
 * Removed dependency of ejs in favor of inline js template
 * Use gitmoji as commit linter
 * Automatically format code via lint-staged and prettier
-* Introduced testing for frontend (enzyme)
 * Adapted eslint-config-airbnb
 * Enable react-hot-loader for better frontend dev experiences
 * Use good old prop-types for prop validation in react
