@@ -35,6 +35,7 @@ npm i bull-master
 The first step is to let bull-board know the queues you have already set up, to do so we use the `setQueues` method.
 
 ```js
+// for express
 const express = require('express')
 const Queue = require('bull')
 const bullMaster = require('bull-master')
@@ -46,6 +47,25 @@ const someOtherQueue = new Queue()
 app.use('/admin/queues', bullMaster({
   queues: [someQueue, someOtherQueue],
 }))
+
+// for koa
+const Koa = require('koa')
+const Router = require('@koa/router')
+const Queue = require('bull')
+const bullMaster = require('bull-master')
+const app = new Koa()
+
+const someQueue = new Queue()
+const someOtherQueue = new Queue()
+
+router.all('/admin/queues*', bullMaster.koa({
+  queues: [someQueue, someOtherQueue],
+  prefix: '/admin/queues',
+}))
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
 // other configurations for your server
 ```
 
