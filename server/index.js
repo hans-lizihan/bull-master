@@ -27,7 +27,7 @@ module.exports = ({ queues, prefix }) => {
 
   const router = express.Router();
   router
-    .use('/', express.static(path.resolve(__dirname, '../static')))
+    .use('/', express.static(path.resolve(__dirname, '../dist')))
     .get('/', render)
     .get('/queues/:queueName', render)
     .get('/queues/:queueName/:jobId', render)
