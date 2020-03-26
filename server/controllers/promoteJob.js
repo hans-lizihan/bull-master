@@ -9,9 +9,10 @@ const promoteJob = async (req, res) => {
     });
   }
 
-  const jobs = await Promise.all(
-    req.body.jobs.map(jobId => queue.getJob(jobId)),
-  );
+  const jobs =
+    req.body.status === 'delayed'
+      ? await queue.getDelayed()
+      : await Promise.all(req.body.jobs.map(jobId => queue.getJob(jobId)));
 
   await Promise.all(jobs.map(job => job.promote()));
 

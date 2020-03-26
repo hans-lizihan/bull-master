@@ -60,8 +60,10 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
+    display: 'flex',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
+    justifyContent: 'space-between',
   },
   highlight:
     theme.palette.type === 'light'
@@ -73,12 +75,9 @@ const useToolbarStyles = makeStyles(theme => ({
           color: theme.palette.text.primary,
           backgroundColor: theme.palette.secondary.dark,
         },
-  title: {
-    flex: '1 1 100%',
-  },
 }));
 
-const EnhancedTableToolbar = ({ numSelected, title, actions }) => {
+const EnhancedTableToolbar = ({ numSelected, title, actions, bulkActions }) => {
   const classes = useToolbarStyles();
   return (
     <Toolbar
@@ -87,20 +86,15 @@ const EnhancedTableToolbar = ({ numSelected, title, actions }) => {
       })}
     >
       {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-        >
+        <Typography color="inherit" variant="subtitle1">
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle">
+        <Typography variant="h6" id="tableTitle">
           {title}
         </Typography>
       )}
-
-      {numSelected > 0 && actions}
+      <div>{numSelected > 0 ? bulkActions : actions}</div>
     </Toolbar>
   );
 };
@@ -108,7 +102,14 @@ const EnhancedTableToolbar = ({ numSelected, title, actions }) => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  actions: PropTypes.arrayOf(PropTypes.node).isRequired,
+  actions: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+  bulkActions: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -138,6 +139,10 @@ const useStyles = makeStyles(theme => ({
 export default function EnhancedTable({
   rowsPerPageOptions,
   data,
+  bulkActions,
+  selected,
+  onCellClick,
+  onSelectAllClick,
   columns,
   totalCount,
   rowsPerPage,
@@ -149,37 +154,6 @@ export default function EnhancedTable({
   size,
 }) {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState([]);
-
-  // TODO: move selected countrol outside
-  const handleSelectAllClick = event => {
-    if (event.target.checked) {
-      const newSelecteds = data.map(n => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
@@ -189,6 +163,7 @@ export default function EnhancedTable({
         <EnhancedTableToolbar
           title={title}
           actions={actions}
+          bulkActions={bulkActions}
           numSelected={selected.length}
         />
         <TableContainer>
@@ -201,22 +176,23 @@ export default function EnhancedTable({
             <EnhancedTableHead
               columns={columns}
               numSelected={selected.length}
-              onSelectAllClick={handleSelectAllClick}
+              onSelectAllClick={onSelectAllClick}
               rowCount={data.length}
             />
             <TableBody>
               {data.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
+                const key = `${row.id}-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={event => handleClick(event, row.id)}
+                    onClick={event => onCellClick(event, row.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={key}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
@@ -263,8 +239,18 @@ EnhancedTable.propTypes = {
   page: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
   onChangeRowsPerPage: PropTypes.func.isRequired,
-  actions: PropTypes.arrayOf(PropTypes.node),
+  actions: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  bulkActions: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   title: PropTypes.string,
+  onCellClick: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   size: PropTypes.oneOf(['small', 'medium']),
 };
 
@@ -272,6 +258,7 @@ EnhancedTable.defaultProps = {
   title: '',
   rowsPerPageOptions: [5, 20, 50],
   actions: [],
+  bulkActions: [],
   size: 'small',
   totalCount: 0,
 };

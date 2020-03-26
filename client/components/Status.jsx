@@ -16,6 +16,11 @@ const useStyles = makeStyles(() => ({
     background: 'transparent',
     cursor: 'inherit',
   },
+  avartar: {
+    minWidth: '24px !important',
+    width: 'auto !important',
+    padding: '0 3px 0 3px',
+  },
   active: {
     background: purple[100],
   },
@@ -59,7 +64,9 @@ const Status = ({ status, count, ...rest }) => {
       label={ucFirst(status)}
       avatar={
         hasCount(count) ? (
-          <Avatar className={classes[status]}>{count}</Avatar>
+          <Avatar className={clsx(classes[status], classes.avartar)}>
+            {count}
+          </Avatar>
         ) : null
       }
       {...rest}

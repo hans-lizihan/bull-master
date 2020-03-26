@@ -9,11 +9,20 @@ module.exports = async (req, res) => {
     });
   }
 
-  const jobs = await Promise.all(
-    req.body.jobs.map(jobId => queue.getJob(jobId)),
-  );
+  const jobs =
+    req.body.status === 'failed'
+      ? await queue.getFailed()
+      : await Promise.all(req.body.jobs.map(jobId => queue.getJob(jobId)));
 
-  await Promise.all(jobs.map(job => job.retry()));
+  await Promise.all(
+    jobs.map(async job => {
+      try {
+        await job.retry();
+      } catch (e) {
+        await job.moveToFailed(e, true);
+      }
+    }),
+  );
 
   return res.sendStatus(204);
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useResource } from 'react-request-hook';
@@ -9,11 +9,12 @@ import Button from '@material-ui/core/Button';
 import { Link as RouterLink } from 'react-router-dom';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Link from '@material-ui/core/Link';
-import { formatISO, formatDistance } from 'date-fns';
+import { formatISO, formatDistanceStrict } from 'date-fns';
 import CircularProgress from '../components/CircularProgress';
 import StatusTabs from './StatusTabs';
 import useInterval from '../hooks/useInterval';
 import Table from '../components/Table';
+import client from '../network/client';
 
 const FIELDS = {
   active: ['id', 'name', 'progress', 'timestamp', 'processedOn', 'actions'],
@@ -28,7 +29,7 @@ const FIELDS = {
   delayed: ['id', 'name', 'attempts', 'timestamp', 'delayedTo', 'actions'],
   failed: ['id', 'attempts', 'name', 'progress', 'finishedOn', 'actions'],
   paused: ['id', 'name', 'timestamp', 'processedOn', 'actions'],
-  waiting: ['id', 'name', 'timestamp', 'actions'],
+  waiting: ['id', 'name', 'attempts', 'timestamp', 'finishedOn', 'actions'],
 };
 
 const Queue = ({ match, history, location }) => {
@@ -41,6 +42,25 @@ const Queue = ({ match, history, location }) => {
     url: `/queues/${match.params.queueName}/jobs?status=${status}&pageSize=${pageSize}&page=${page}`,
     method: 'GET',
   }));
+  const [, retryAll] = useResource(() => ({
+    url: `/queues/${match.params.queueName}/retries`,
+    method: 'POST',
+    data: {
+      status: 'failed',
+    },
+  }));
+  const [, cleanQueue] = useResource(() => ({
+    url: `/queues/${match.params.queueName}/clean`,
+    method: 'POST',
+  }));
+  const [, promoteAll] = useResource(() => ({
+    url: `/queues/${match.params.queueName}/promotes`,
+    method: 'POST',
+    data: {
+      status: 'delayed',
+    },
+  }));
+  const [selected, setSelected] = useState([]);
   const query = new URLSearchParams(location.search);
   const status = query.get('status') || 'active';
   const page = parseInt(query.get('page') || 0, 10);
@@ -60,6 +80,8 @@ const Queue = ({ match, history, location }) => {
   const handleStatusChange = (event, newValue) => {
     const newQuery = new URLSearchParams(location.search);
     newQuery.set('status', newValue);
+    newQuery.set('page', 0);
+    setSelected([]);
     getJobs({
       page,
       pageSize,
@@ -89,17 +111,74 @@ const Queue = ({ match, history, location }) => {
     history.push(`${location.pathname}?${newQuery.toString()}`);
   };
 
+  const data = jobs.data?.data || [];
+
+  // TODO: move selected countrol outside
+  const handleSelectAllClick = event => {
+    if (event.target.checked) {
+      const newSelecteds = data.map(n => n.id);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleCellClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  const handleBulkRetry = () => {
+    client({
+      url: `/queues/${match.params.queueName}/retries`,
+      method: 'POST',
+      data: {
+        jobs: selected,
+      },
+    })
+      .then(() => setSelected([]))
+      .then(refreshTable);
+  };
+
+  const handleBulkPromote = () => {
+    client({
+      url: `/queues/${match.params.queueName}/promotes`,
+      method: 'POST',
+      data: {
+        jobs: selected,
+      },
+    })
+      .then(() => setSelected([]))
+      .then(refreshTable);
+  };
+
   const { name, counts } = queue.data || {};
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
+      <Grid container item xs={12} justify="space-between">
         <Breadcrumbs aria-label="breadcrumb">
           <Link component={RouterLink} color="inherit" to="/">
             Dashboard
           </Link>
           <Typography color="textPrimary">{name}</Typography>
         </Breadcrumbs>
+        <Button onClick={cleanQueue}>Clean Queue</Button>
       </Grid>
       <Grid item xs={12}>
         <StatusTabs
@@ -112,7 +191,10 @@ const Queue = ({ match, history, location }) => {
         <Table
           title={name}
           page={page}
+          selected={selected}
           onChangePage={handleChangePage}
+          onCellClick={handleCellClick}
+          onSelectAllClick={handleSelectAllClick}
           columns={[
             { title: 'ID', field: 'id' },
             { title: 'Job Name', field: 'name' },
@@ -123,7 +205,7 @@ const Queue = ({ match, history, location }) => {
                 value && (
                   <Tooltip
                     placement="top"
-                    title={`${formatDistance(value, Date.now())} ago`}
+                    title={`${formatDistanceStrict(value, Date.now())} ago`}
                   >
                     <span>{formatISO(value)}</span>
                   </Tooltip>
@@ -135,7 +217,7 @@ const Queue = ({ match, history, location }) => {
               render: value =>
                 value && (
                   <Tooltip placement="top" title={formatISO(value)}>
-                    <span>{formatDistance(value, Date.now())} ago</span>
+                    <span>{formatDistanceStrict(value, Date.now())} ago</span>
                   </Tooltip>
                 ),
             },
@@ -145,7 +227,7 @@ const Queue = ({ match, history, location }) => {
               render: value =>
                 value ? (
                   <Tooltip placement="top" title={formatISO(value)}>
-                    <span>{formatDistance(value, Date.now())} ago</span>
+                    <span>{formatDistanceStrict(value, Date.now())} ago</span>
                   </Tooltip>
                 ) : (
                   'Not completed'
@@ -157,7 +239,7 @@ const Queue = ({ match, history, location }) => {
               render: value =>
                 value && (
                   <Tooltip placement="top" title={formatISO(value)}>
-                    <span>{formatDistance(value, Date.now())} later</span>
+                    <span>{formatDistanceStrict(value, Date.now())} later</span>
                   </Tooltip>
                 ),
             },
@@ -190,12 +272,27 @@ const Queue = ({ match, history, location }) => {
           pageSizeOptions={[5, 20, 50, 100]}
           onChangeRowsPerPage={handleChangeRowsPerPage}
           totalCount={jobs.data?.totalCount}
-          actions={[
-            status === 'delayed' && <Button key="promote">Promote</Button>,
-            <Button key="Remove">Remove</Button>,
-            status === 'failed' && <Button key="retry">Retry</Button>,
-          ].filter(b => b)}
-          data={jobs.data?.data || []}
+          bulkActions={
+            <div>
+              {status === 'delayed' && (
+                <Button onClick={handleBulkPromote}>Promote</Button>
+              )}
+              {status === 'failed' && (
+                <Button onClick={handleBulkRetry}>Retry</Button>
+              )}
+            </div>
+          }
+          actions={
+            <div>
+              {status === 'delayed' && (
+                <Button onClick={promoteAll}>Promote All</Button>
+              )}
+              {status === 'failed' && (
+                <Button onClick={retryAll}>Retry All</Button>
+              )}
+            </div>
+          }
+          data={data}
         />
       </Grid>
     </Grid>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -7,12 +7,12 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import clsx from 'clsx';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Link as RouterLink } from 'react-router-dom';
 import { useResource, useRequest } from 'react-request-hook';
 import { formatISO } from 'date-fns';
 import { makeStyles } from '@material-ui/core/styles';
-import MuiCircularProgress from '@material-ui/core/CircularProgress';
 import CircularProgress from '../components/CircularProgress';
 import Section from '../components/Section';
 import Title from '../components/Title';
@@ -41,8 +41,7 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.success.light,
     },
   },
-  buttonContainer: {
-    position: 'relative',
+  button: {
     marginRight: 16,
     '&:last-child': {
       marginRight: 0,
@@ -71,45 +70,43 @@ const Job = ({ match, history }) => {
       jobs: [jobId],
     },
   }));
-  const [retryJobResponse, retryJob] = useResource(({ jobId, queueName }) => ({
+  const [, createRetryJobRequest] = useRequest(({ jobId, queueName }) => ({
     url: `/queues/${queueName}/retries`,
     method: 'POST',
     data: {
       jobs: [jobId],
     },
   }));
-  const [promoteJobResponse, promoteJob] = useResource(
-    ({ jobId, queueName }) => ({
-      url: `/queues/${queueName}/promotes`,
-      method: 'POST',
-      data: {
-        jobs: [jobId],
-      },
-    }),
-  );
+  const [, createPromoteJobRequest] = useRequest(({ jobId, queueName }) => ({
+    url: `/queues/${queueName}/promotes`,
+    method: 'POST',
+    data: {
+      jobs: [jobId],
+    },
+  }));
   const { jobId, queueName } = match.params;
   useInterval(() => {
     getJob({ jobId, queueName });
   }, 4000);
-  const [isRemoving, setRemove] = useState(false);
 
   const stacktrace = job.data?.stacktrace || [];
   const logs = job.data?.logs || [];
   const status = job.data?.status || 'active';
 
   const handleRemove = () => {
-    setRemove(true);
     createRemoveRequest({ jobId, queueName })
       .ready()
       .then(() => history.push(`/queues/${queueName}?status=${status}`));
   };
   const handlePromote = () => {
-    promoteJob({ jobId, queueName });
-    getJob({ jobId, queueName });
+    createPromoteJobRequest({ jobId, queueName })
+      .ready()
+      .then(() => getJob({ jobId, queueName }));
   };
   const handleRetry = () => {
-    retryJob({ jobId, queueName });
-    getJob({ jobId });
+    createRetryJobRequest({ jobId, queueName })
+      .ready()
+      .then(() => getJob({ jobId, queueName }));
   };
 
   return (
@@ -147,55 +144,36 @@ const Job = ({ match, history }) => {
               className={classes.actions}
               justify="flex-end"
             >
-              {status === 'failed' && (
-                <div
-                  disabled={retryJobResponse.isLoading}
-                  className={classes.buttonContainer}
+              {['failed'].includes(status) && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={clsx(classes.retry, classes.button)}
+                  onClick={handleRetry}
                 >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.retry}
-                    onClick={handleRetry}
-                  >
-                    Retry
-                  </Button>
-                  {retryJobResponse.isLoading && (
-                    <MuiCircularProgress size={24} className={classes.loader} />
-                  )}
-                </div>
+                  Retry
+                </Button>
               )}
-              {['failed', 'completed'].includes(status) && (
-                <div disabled={isRemoving} className={classes.buttonContainer}>
-                  <Button
-                    className={classes.remove}
-                    variant="contained"
-                    onClick={handleRemove}
-                  >
-                    Remove
-                  </Button>
-                  {isRemoving && (
-                    <MuiCircularProgress size={24} className={classes.loader} />
-                  )}
-                </div>
+              {['failed', 'completed', 'waiting', 'paused'].includes(
+                status,
+              ) && (
+                <Button
+                  className={clsx(classes.remove, classes.button)}
+                  variant="contained"
+                  onClick={handleRemove}
+                >
+                  Remove
+                </Button>
               )}
               {status === 'delayed' && (
-                <div
-                  disabled={promoteJobResponse.isLoading}
-                  className={classes.buttonContainer}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={clsx(classes.promote, classes.button)}
+                  onClick={handlePromote}
                 >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.promote}
-                    onClick={handlePromote}
-                  >
-                    Promote
-                  </Button>
-                  {promoteJobResponse.isLoading && (
-                    <MuiCircularProgress size={24} className={classes.loader} />
-                  )}
-                </div>
+                  Promote
+                </Button>
               )}
             </Grid>
           </Grid>
@@ -239,6 +217,16 @@ const Job = ({ match, history }) => {
               <Typography variant="body1">
                 {job.data?.delayedTo ? formatISO(job.data?.delayedTo) : '-'}
               </Typography>
+            </Grid>
+          </Grid>
+          <Grid container style={{ marginBottom: 16 }} alignItems="center">
+            <Grid item xs={4}>
+              <Typography variant="body1" component="span">
+                Failed Reason
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant="body1">{job.data?.failedReason}</Typography>
             </Grid>
           </Grid>
         </Section>
@@ -296,7 +284,7 @@ const Job = ({ match, history }) => {
           <Section>
             <Typography variant="h6">Error Stack</Typography>
             <List>
-              {stacktrace.map((trace, index) => (
+              {stacktrace.reverse().map((trace, index) => (
                 /* eslint-disable-next-line */
                 <ListItem key={`${trace}-${index}`}>
                   <pre>{trace}</pre>
@@ -311,7 +299,7 @@ const Job = ({ match, history }) => {
           <Section>
             <Typography variant="h6">Logs</Typography>
             <List>
-              {logs.map((log, index) => (
+              {logs.reverse().map((log, index) => (
                 /* eslint-disable-next-line */
                 <ListItem key={`${log}-${index}`}>
                   <pre>{log}</pre>
