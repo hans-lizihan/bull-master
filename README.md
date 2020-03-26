@@ -1,5 +1,7 @@
 # bull master
 
+![Screen Shot bull-master](https://user-images.githubusercontent.com/7879022/77668840-e8e4ce80-6fbe-11ea-8a35-e65d247e10b6.png)
+
 Bull Dashboard is a UI built on top of [Bull](https://github.com/OptimalBits/bull) to help you visualize your queues and their jobs.
 With this library you get a beautiful UI for visualizing what's happening with each job in your queues, their status and some actions that will enable you to get the jobs done.
 
