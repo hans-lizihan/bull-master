@@ -1,4 +1,4 @@
-const { Queue: QueueMq } = require('bullmq');
+const isBullMq = require('../utils/isBullMq');
 
 const GRACE_TIME_MS = 5000;
 const LIMIT = 1000;
@@ -15,7 +15,7 @@ const removeJobs = async (req, res) => {
   }
 
   if (!Array.isArray(req.body.jobs)) {
-    if (queue instanceof QueueMq) {
+    if (isBullMq(queue)) {
       await queue.clean(GRACE_TIME_MS, LIMIT, req.body.status);
     } else {
       await queue.clean(GRACE_TIME_MS, req.body.status);

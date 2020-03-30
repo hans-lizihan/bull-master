@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const { Queue: QueueMq } = require('bullmq');
+const isBullMq = require('./utils/isBullMq');
 
 const queuesHandler = require('./controllers/queues');
 const retryJob = require('./controllers/retryJob');
@@ -20,7 +20,7 @@ const wrapAsync = fn => (req, res, next) =>
 module.exports = ({ queues, prefix }) => {
   const app = express();
   app.locals.bullMasterQueues = queues.reduce((acc, queue) => {
-    const name = queue instanceof QueueMq ? queue.toKey('~') : queue.name;
+    const name = isBullMq(queue) ? queue.toKey('~') : queue.name;
     acc[name] = queue;
     return acc;
   }, {});
