@@ -1,4 +1,4 @@
-# bull master
+# bull master [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) [![build](https://github.com/hans-lizihan/bull-master/workflows/Node%20CI/badge.svg)](https://github.com/hans-lizihan/bull-master/actions?query=workflow%3A%22Node+CI%22)
 
 ![Screen Shot bull-master](https://user-images.githubusercontent.com/7879022/77668840-e8e4ce80-6fbe-11ea-8a35-e65d247e10b6.png)
 
