@@ -53,6 +53,14 @@ const Queue = ({ match, history, location }) => {
     url: `/queues/${match.params.queueName}/clean`,
     method: 'POST',
   }));
+  const [, pauseQueue] = useResource(() => ({
+    url: `/queues/${match.params.queueName}/pause`,
+    method: 'POST',
+  }));
+  const [, resumeQueue] = useResource(() => ({
+    url: `/queues/${match.params.queueName}/resume`,
+    method: 'POST',
+  }));
   const [, promoteAll] = useResource(() => ({
     url: `/queues/${match.params.queueName}/promotes`,
     method: 'POST',
@@ -178,7 +186,13 @@ const Queue = ({ match, history, location }) => {
           </Link>
           <Typography color="textPrimary">{name}</Typography>
         </Breadcrumbs>
-        <Button onClick={cleanQueue}>Clean Queue</Button>
+        <div>
+          <Button variant="outlined" onClick={pauseQueue}>
+            Puase Queue
+          </Button>
+          <Button onClick={resumeQueue}>Resume Queue</Button>
+          <Button onClick={cleanQueue}>Clean Queue</Button>
+        </div>
       </Grid>
       <Grid item xs={12}>
         <StatusTabs
