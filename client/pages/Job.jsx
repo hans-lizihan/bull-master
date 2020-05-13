@@ -154,7 +154,7 @@ const Job = ({ match, history }) => {
                   Retry
                 </Button>
               )}
-              {['failed', 'completed', 'waiting', 'paused'].includes(
+              {['delayed', 'failed', 'completed', 'waiting', 'paused'].includes(
                 status,
               ) && (
                 <Button

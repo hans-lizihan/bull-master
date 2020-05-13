@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useResource } from 'react-request-hook';
@@ -121,7 +121,6 @@ const Queue = ({ match, history, location }) => {
 
   const data = jobs.data?.data || [];
 
-  // TODO: move selected countrol outside
   const handleSelectAllClick = event => {
     if (event.target.checked) {
       const newSelecteds = data.map(n => n.id);
@@ -175,6 +174,18 @@ const Queue = ({ match, history, location }) => {
       .then(refreshTable);
   };
 
+  const handleBulkRemove = () => {
+    client({
+      url: `/queues/${match.params.queueName}/removes`,
+      method: 'POST',
+      data: {
+        jobs: selected,
+      },
+    })
+      .then(() => setSelected([]))
+      .then(refreshTable);
+  };
+
   const { name, counts } = queue.data || {};
 
   return (
@@ -188,7 +199,7 @@ const Queue = ({ match, history, location }) => {
         </Breadcrumbs>
         <div>
           <Button variant="outlined" onClick={pauseQueue}>
-            Puase Queue
+            Pause Queue
           </Button>
           <Button onClick={resumeQueue}>Resume Queue</Button>
           <Button onClick={cleanQueue}>Clean Queue</Button>
@@ -289,7 +300,10 @@ const Queue = ({ match, history, location }) => {
           bulkActions={
             <div>
               {status === 'delayed' && (
-                <Button onClick={handleBulkPromote}>Promote</Button>
+                <Fragment>
+                  <Button onClick={handleBulkPromote}>Promote</Button>
+                  <Button onClick={handleBulkRemove}>Remove</Button>
+                </Fragment>
               )}
               {status === 'failed' && (
                 <Button onClick={handleBulkRetry}>Retry</Button>
