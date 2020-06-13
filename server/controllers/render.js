@@ -1,7 +1,7 @@
 module.exports = (req, res) => {
   const baseUrl = req.proxyUrl || req.baseUrl;
 
-  res.end(`
+  res.send(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
