@@ -108,7 +108,7 @@ const Queue = ({ match, history, location }) => {
     });
     history.push(`${location.pathname}?${newQuery.toString()}`);
   };
-  const handleChangeRowsPerPage = e => {
+  const handleChangeRowsPerPage = (e) => {
     const newQuery = new URLSearchParams(location.search);
     newQuery.set('pageSize', e.target.value);
     getJobs({
@@ -121,9 +121,9 @@ const Queue = ({ match, history, location }) => {
 
   const data = jobs.data?.data || [];
 
-  const handleSelectAllClick = event => {
+  const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = data.map(n => n.id);
+      const newSelecteds = data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -226,7 +226,7 @@ const Queue = ({ match, history, location }) => {
             {
               title: 'Created At',
               field: 'timestamp',
-              render: value =>
+              render: (value) =>
                 value && (
                   <Tooltip
                     placement="top"
@@ -239,7 +239,7 @@ const Queue = ({ match, history, location }) => {
             {
               title: 'Started At',
               field: 'processedOn',
-              render: value =>
+              render: (value) =>
                 value && (
                   <Tooltip placement="top" title={formatISO(value)}>
                     <span>{formatDistanceStrict(value, Date.now())} ago</span>
@@ -249,7 +249,7 @@ const Queue = ({ match, history, location }) => {
             {
               title: 'Completed At',
               field: 'finishedOn',
-              render: value =>
+              render: (value) =>
                 value ? (
                   <Tooltip placement="top" title={formatISO(value)}>
                     <span>{formatDistanceStrict(value, Date.now())} ago</span>
@@ -261,7 +261,7 @@ const Queue = ({ match, history, location }) => {
             {
               title: 'Delayed To',
               field: 'delayedTo',
-              render: value =>
+              render: (value) =>
                 value && (
                   <Tooltip placement="top" title={formatISO(value)}>
                     <span>{formatDistanceStrict(value, Date.now())} later</span>
@@ -271,12 +271,13 @@ const Queue = ({ match, history, location }) => {
             {
               title: 'Progress',
               field: 'progress',
-              render: value => <CircularProgress size={48} value={value} />,
+              render: (value) => <CircularProgress size={48} value={value} />,
             },
             {
               title: 'Attempts',
               field: 'attempts',
-              render: (val, field) => field.attemptsMade,
+              render: (val, field) =>
+                `${field.attemptsMade}/${field.attemptsTotal}`,
             },
             {
               title: 'Actions',
@@ -292,7 +293,7 @@ const Queue = ({ match, history, location }) => {
                 </Button>
               ),
             },
-          ].filter(column => FIELDS[status].includes(column.field))}
+          ].filter((column) => FIELDS[status].includes(column.field))}
           rowsPerPage={pageSize}
           pageSizeOptions={[5, 20, 50, 100]}
           onChangeRowsPerPage={handleChangeRowsPerPage}

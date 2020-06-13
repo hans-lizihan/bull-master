@@ -19,7 +19,7 @@ import Title from '../components/Title';
 import Status from '../components/Status';
 import useInterval from '../hooks/useInterval';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   remove: {
     backgroundColor: theme.palette.error.main,
     color: theme.palette.error.contrastText,
@@ -302,7 +302,7 @@ const Job = ({ match, history }) => {
               {logs.reverse().map((log, index) => (
                 /* eslint-disable-next-line */
                 <ListItem key={`${log}-${index}`}>
-                  <pre>{log}</pre>
+                  <pre style={{ margin: 0 }}>{log}</pre>
                 </ListItem>
               ))}
             </List>
