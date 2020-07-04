@@ -16,16 +16,23 @@ const pauseQueue = require('./controllers/pauseQueue');
 const resumeQueue = require('./controllers/resumeQueue');
 const cleanQueue = require('./controllers/cleanQueue');
 
-const wrapAsync = fn => (req, res, next) =>
+const wrapAsync = (fn) => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);
 
 module.exports = ({ queues, prefix }) => {
   const app = express();
-  app.locals.bullMasterQueues = queues.reduce((acc, queue) => {
-    const name = isBullMq(queue) ? queue.toKey('~') : queue.name;
-    acc[name] = queue;
-    return acc;
-  }, {});
+  // exporting function for setting queues and getting queues
+  app.setQueues = (qs) => {
+    app.locals.bullMasterQueues = qs.reduce((acc, queue) => {
+      const name = isBullMq(queue) ? queue.toKey('~') : queue.name;
+      acc[name] = queue;
+      return acc;
+    }, {});
+  };
+  app.getQueues = () => {
+    return Object.values(app.locals.bullMasterQueues);
+  };
+  app.setQueues(queues);
 
   const router = express.Router();
   router
@@ -65,7 +72,7 @@ module.exports = ({ queues, prefix }) => {
   return app;
 };
 
-module.exports.koa = ({ queues, prefix }) => ctx => {
+module.exports.koa = ({ queues, prefix }) => (ctx) => {
   if (ctx.status === 404 || ctx.status === '404') {
     delete ctx.res.statusCode;
   }
