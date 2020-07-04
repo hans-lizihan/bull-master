@@ -32,7 +32,7 @@ npm i bull-master
 
 ## Hello World
 
-The first step is to let bull-board know the queues you have already set up, to do so we use the `setQueues` method.
+The first step is to let bull-board know the queues you have already set up, to do so we use the `queues` option.
 
 ```js
 // for express
@@ -44,9 +44,15 @@ const app = express()
 const someQueue = new Queue()
 const someOtherQueue = new Queue()
 
-app.use('/admin/queues', bullMaster({
+const bullMasterApp = bullMaster({
   queues: [someQueue, someOtherQueue],
-}))
+})
+// you can get existing queues
+bullMasterApp.getQueues()
+// you could also choose to change the queues to display in run time
+bullMasterApp.setQueues([someQueue])
+
+app.use('/admin/queues', bullMasterApp)
 
 // for koa
 const Koa = require('koa')
