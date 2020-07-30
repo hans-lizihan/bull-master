@@ -57,8 +57,8 @@
     "bullmq": "^1.8.3"
   },
   "devDependencies": {
-    "@babel/core": "7.10.5",
-    "@babel/plugin-proposal-optional-chaining": "7.10.4",
+    "@babel/core": "7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "7.11.0",
     "@commitlint/cli": "9.1.1",
     "@commitlint/core": "9.1.1",
     "@hot-loader/react-dom": "16.13.0",
