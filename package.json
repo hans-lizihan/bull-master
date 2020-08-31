@@ -88,7 +88,7 @@
     "nodemon": "2.0.4",
     "prettier": "2.1.1",
     "prettier-eslint": "11.0.0",
-    "pretty-bytes": "5.4.0",
+    "pretty-bytes": "5.4.1",
     "prop-types": "15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
