@@ -1,7 +1,7 @@
 {
   "name": "bull-master",
   "description": "Bull queue UI for inspecting and manipulating jobs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "keywords": [
     "bull",
     "redis",
