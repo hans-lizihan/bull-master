@@ -13,7 +13,7 @@ const getMemoryUsage = (usedMemory, totalSystemMemory) => {
   const usedMemoryNumber = parseInt(usedMemory, 10);
 
   if (!totalSystemMemory) {
-    return formatBytes(usedMemory);
+    return formatBytes(parseInt(usedMemory, 10));
   }
   const totalSystemMemoryNumber = parseInt(totalSystemMemory, 10);
 
