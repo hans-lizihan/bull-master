@@ -33,6 +33,7 @@ const FIELDS = {
 };
 
 const Queue = ({ match, history, location }) => {
+  const { pathname } = location || {};
   const [queue, getQueue] = useResource(() => ({
     url: `/queues/${match.params.queueName}`,
     method: 'GET',
@@ -95,7 +96,7 @@ const Queue = ({ match, history, location }) => {
       pageSize,
       status: newValue,
     });
-    history.push(`${location.pathname}?${newQuery.toString()}`);
+    history.push(`${pathname}?${newQuery.toString()}`);
   };
 
   const handleChangePage = (e, newPage) => {
@@ -106,7 +107,7 @@ const Queue = ({ match, history, location }) => {
       pageSize,
       status,
     });
-    history.push(`${location.pathname}?${newQuery.toString()}`);
+    history.push(`${pathname}?${newQuery.toString()}`);
   };
   const handleChangeRowsPerPage = (e) => {
     const newQuery = new URLSearchParams(location.search);
@@ -116,7 +117,7 @@ const Queue = ({ match, history, location }) => {
       pageSize: e.target.value,
       status,
     });
-    history.push(`${location.pathname}?${newQuery.toString()}`);
+    history.push(`${pathname}?${newQuery.toString()}`);
   };
 
   const data = jobs.data?.data || [];
@@ -287,7 +288,7 @@ const Queue = ({ match, history, location }) => {
                   size="small"
                   component={RouterLink}
                   startIcon={<VisibilityIcon />}
-                  to={`${location.pathname}/${field.id}`}
+                  to={`${pathname}/${field.id}`}
                 >
                   Details
                 </Button>
