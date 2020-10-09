@@ -74,7 +74,7 @@
     "date-fns": "2.16.1",
     "enzyme": "3.11.0",
     "enzyme-to-json": "3.6.1",
-    "eslint": "7.10.0",
+    "eslint": "7.11.0",
     "eslint-config-airbnb": "18.2.0",
     "eslint-config-prettier": "6.12.0",
     "eslint-plugin-import": "2.22.1",
