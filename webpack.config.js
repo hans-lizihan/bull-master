@@ -41,12 +41,18 @@ module.exports = {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-  ].filter(p => !!p),
+  ].filter((p) => !!p),
   module: {
     rules: [
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
       },
       {
         test: /\.js(x?)$/,
