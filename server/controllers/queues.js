@@ -9,12 +9,10 @@ module.exports = async (req, res) => {
   }
 
   const queues = await Promise.all(
-    pairs.map(async ([name, queue]) => {
-      return {
-        name,
-        counts: await getCounts(queue),
-      };
-    }),
+    pairs.map(async ([name, queue]) => ({
+      name,
+      counts: await getCounts(queue),
+    })),
   );
 
   return res.json({

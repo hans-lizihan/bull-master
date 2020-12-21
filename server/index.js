@@ -29,9 +29,7 @@ module.exports = ({ queues, prefix }) => {
       return acc;
     }, {});
   };
-  app.getQueues = () => {
-    return Object.values(app.locals.bullMasterQueues);
-  };
+  app.getQueues = () => Object.values(app.locals.bullMasterQueues);
   app.setQueues(queues);
 
   const router = express.Router();

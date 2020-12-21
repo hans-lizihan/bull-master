@@ -7,8 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Title from './Title';
 import Status from './Status';
 
-const QueueList = ({ queues }) => {
-  return queues.map(
+const QueueList = ({ queues }) =>
+  queues.map(
     ({
       name,
       counts: { active, completed, delayed, failed, paused, waiting },
@@ -28,7 +28,6 @@ const QueueList = ({ queues }) => {
       </Card>
     ),
   );
-};
 
 QueueList.propTypes = {
   queues: PropTypes.arrayOf(
