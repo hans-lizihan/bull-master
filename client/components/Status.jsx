@@ -41,11 +41,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ucFirst = str => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
+const ucFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-const hasCount = count => {
+const hasCount = (count) => {
   if (!count && count !== 0) {
     return false;
   }

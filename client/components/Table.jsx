@@ -31,7 +31,7 @@ function EnhancedTableHead({
             inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
-        {columns.map(column => (
+        {columns.map((column) => (
           <TableCell
             key={`table-header-${column.field}`}
             align={column.numeric ? 'right' : 'left'}
@@ -58,7 +58,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles(theme => ({
+const useToolbarStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     paddingLeft: theme.spacing(2),
@@ -112,7 +112,7 @@ EnhancedTableToolbar.propTypes = {
   ]).isRequired,
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
@@ -155,7 +155,7 @@ export default function EnhancedTable({
 }) {
   const classes = useStyles();
 
-  const isSelected = name => selected.indexOf(name) !== -1;
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   return (
     <div className={classes.root}>
@@ -188,7 +188,7 @@ export default function EnhancedTable({
                 return (
                   <TableRow
                     hover
-                    onClick={event => onCellClick(event, row.id)}
+                    onClick={(event) => onCellClick(event, row.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}

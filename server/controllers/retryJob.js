@@ -12,10 +12,10 @@ module.exports = async (req, res) => {
   const jobs =
     req.body.status === 'failed'
       ? await queue.getFailed()
-      : await Promise.all(req.body.jobs.map(jobId => queue.getJob(jobId)));
+      : await Promise.all(req.body.jobs.map((jobId) => queue.getJob(jobId)));
 
   await Promise.all(
-    jobs.map(async job => {
+    jobs.map(async (job) => {
       try {
         await job.retry();
       } catch (e) {

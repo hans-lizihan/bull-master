@@ -9,7 +9,9 @@ module.exports = {
   rules: {
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: ['**/*.test.js', '**/*.spec.js', 'webpack.config.js'] },
+      {
+        devDependencies: ['**/*.test.js', '**/*.spec.js', 'webpack.config.js'],
+      },
     ],
   },
 };

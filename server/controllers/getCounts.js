@@ -7,6 +7,4 @@ const STATUSES = [
   'waiting',
 ];
 
-module.exports = async queue => {
-  return queue.getJobCounts(...STATUSES);
-};
+module.exports = async (queue) => queue.getJobCounts(...STATUSES);

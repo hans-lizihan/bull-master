@@ -22,9 +22,9 @@ const removeJobs = async (req, res) => {
     }
   } else {
     const jobs = await Promise.all(
-      req.body.jobs.map(jobId => queue.getJob(jobId)),
+      req.body.jobs.map((jobId) => queue.getJob(jobId)),
     );
-    await Promise.all(jobs.map(job => job.remove()));
+    await Promise.all(jobs.map((job) => job.remove()));
   }
 
   return res.sendStatus(200);

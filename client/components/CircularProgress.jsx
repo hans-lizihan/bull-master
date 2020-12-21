@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import MuiCircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
   },

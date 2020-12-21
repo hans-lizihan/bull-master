@@ -27,9 +27,9 @@ const COLORS = {
 
 const transformStatForPieChart = (queues, filters) => {
   const sum = queues
-    .map(queue => queue.counts)
+    .map((queue) => queue.counts)
     .reduce((acc, cur) => {
-      Object.keys(cur).forEach(key => {
+      Object.keys(cur).forEach((key) => {
         if (!acc[key]) {
           acc[key] = 0;
         }
@@ -49,7 +49,7 @@ const transformStatForPieChart = (queues, filters) => {
 const calculatePercentage = (data, status) => {
   if (data.length === 0) return 0.0;
   const sum = data.reduce((acc, cur) => acc + cur.value, 0);
-  const target = data.find(d => d.name === status);
+  const target = data.find((d) => d.name === status);
   const value = target?.value || 0;
   if (sum === 0) return 0.0;
   return ((value / sum) * 100).toFixed(2);
@@ -127,7 +127,7 @@ const Dashboard = () => {
                 fill="#8884d8"
                 label
               >
-                {inQueuePieData.map(d => (
+                {inQueuePieData.map((d) => (
                   <Cell key={d.name} fill={COLORS[d.name]} />
                 ))}
               </Pie>
@@ -175,7 +175,7 @@ const Dashboard = () => {
                 fill="#8884d8"
                 label
               >
-                {completedPieData.map(d => (
+                {completedPieData.map((d) => (
                   <Cell key={d.name} fill={COLORS[d.name]} />
                 ))}
               </Pie>

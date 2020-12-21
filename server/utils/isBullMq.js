@@ -1,4 +1,4 @@
-module.exports = queue => {
+module.exports = (queue) => {
   try {
     // eslint-disable-next-line
     const { Queue: QueueMq } = require('bullmq');

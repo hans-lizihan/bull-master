@@ -9,15 +9,15 @@
   "overrides": [
     {
       "files": ".prettierrc",
-      "options": {"parser": "json", "useTabs": false}
+      "options": { "parser": "json", "useTabs": false }
     },
     {
       "files": "package.json",
-      "options": {"parser": "json", "useTabs": false}
+      "options": { "parser": "json", "useTabs": false }
     },
     {
       "files": "jest.config.json",
-      "options": {"parser": "json", "useTabs": false}
+      "options": { "parser": "json", "useTabs": false }
     }
   ]
 }
