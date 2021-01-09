@@ -69,7 +69,7 @@
     "babel-loader": "8.2.2",
     "babel-preset-react-app": "10.0.0",
     "clsx": "1.1.1",
-    "commitlint-config-gitmoji": "1.0.1",
+    "commitlint-config-gitmoji": "1.1.0",
     "css-loader": "5.0.1",
     "date-fns": "2.16.1",
     "enzyme": "3.11.0",
