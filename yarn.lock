@@ -8693,10 +8693,10 @@ recharts-scale@^0.4.2:
   dependencies:
     decimal.js-light "^2.4.1"
 
-recharts@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.0.2.tgz#6a6914e13252d5c92a150a1cdf55432ccc1bcea2"
-  integrity sha512-oDpAgG0UfvidQpDI4CHJV7GvGLVD/P3XxpJxwcakA76ln3gPWsOVtuXls2IseTXzeZZKPAEvSrdjdykjlCWGUw==
+recharts@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.0.3.tgz#70e4e60c3f032e73bf45589509fafcde23117349"
+  integrity sha512-cfdWQc9fZMjYyqyakNippEvAlHtvkbm3x3oJTLu9VzwdHAY97lPFL399C5XFkpwDJfU6Ep2FYOoIl24PIsabkg==
   dependencies:
     classnames "^2.2.5"
     d3-interpolate "^2.0.1"
