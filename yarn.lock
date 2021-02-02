@@ -1639,6 +1639,16 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@gitmoji/commit-types@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@gitmoji/commit-types/-/commit-types-1.1.5.tgz#8ca89aeea4e253a3818ac63206b4eb4f2352c4ff"
+  integrity sha512-8D3FZMRY+gtYpTcHG1SOGmm9CFqxNh6rI9xDoCydxHxnWgqInbdF3nk9gibW5gXA58Hf2cVcJaLEcGOKLRAtmw==
+
+"@gitmoji/parser-opts@1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@gitmoji/parser-opts/-/parser-opts-1.2.5.tgz#d7adac21a76ed929a497ab8654686d1be244bfa3"
+  integrity sha512-Imxx7OjuZH374H7wNMBEwJ9i1U/0xGEPxjcyYfX47fKzdWZ57UNmiYEC4HoAV8sDpGi4AG0uU4o4NgOiQP1sEg==
+
 "@hot-loader/react-dom@17.0.1":
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/@hot-loader/react-dom/-/react-dom-17.0.1.tgz#0c75b4dd068f819435dafb3e8809ca1749695656"
@@ -3445,10 +3455,19 @@ commander@^7.0.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-7.0.0.tgz#3e2bbfd8bb6724760980988fb5b22b7ee6b71ab2"
   integrity sha512-ovx/7NkTrnPuIV8sqk/GjUIIM1+iUQeqA3ye2VNpq9sVoiZsooObWlQy+OPWGI17GDaEoybuAGJm6U8yC077BA==
 
-commitlint-config-gitmoji@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/commitlint-config-gitmoji/-/commitlint-config-gitmoji-1.1.0.tgz#babb6808a3eb465a7dd1ecd7546611e5e48f0d68"
-  integrity sha512-x3uGGrYqMLfkhC9QsPweMeBCQOM30kK6lYMbBXHjWHZnq7N/C+D2emSFbuDwDM+lK0Px0Zca2W66VnQ3Xt5M4A==
+commitlint-config-gitmoji@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/commitlint-config-gitmoji/-/commitlint-config-gitmoji-2.2.1.tgz#f42e247953f99cd328417956eef20c72f9926910"
+  integrity sha512-VSIC5TJdMqDcYsrswil5max//85170RZcqRRG0pUsVmAB92ntge6XVprgJMi70poPeZHpaDQBraEGaNNnJvsDw==
+  dependencies:
+    "@gitmoji/commit-types" "1.1.5"
+    "@gitmoji/parser-opts" "1.2.5"
+    commitlint-plugin-gitmoji "2.0.6"
+
+commitlint-plugin-gitmoji@2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/commitlint-plugin-gitmoji/-/commitlint-plugin-gitmoji-2.0.6.tgz#ef90562d0033071db39685ef89913d53956f7b8b"
+  integrity sha512-8SdmLPtxKbJiAiLQThO+SJVUO2AIyNCG2WpIL6h7pT1dED+10Rk0T3KWk8zcWJQmQHy+dyMlTMHx3k28BK+M+A==
 
 common-tags@^1.4.0:
   version "1.8.0"
