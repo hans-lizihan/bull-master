@@ -7,7 +7,7 @@ module.exports = {
     jest: true,
   },
 
-  extends: ['airbnb', 'prettier', 'prettier/react'],
+  extends: ['airbnb', 'prettier'],
 
   parserOptions: {
     ecmaVersion: 2018,
