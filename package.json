@@ -51,7 +51,7 @@
     "bullmq": "^1.19.2"
   },
   "devDependencies": {
-    "@babel/core": "7.14.2",
+    "@babel/core": "7.14.3",
     "@babel/plugin-proposal-optional-chaining": "7.14.2",
     "@commitlint/cli": "12.1.4",
     "@commitlint/core": "12.1.4",
