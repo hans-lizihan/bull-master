@@ -92,7 +92,7 @@
     "react-router-dom": "5.2.0",
     "recharts": "2.0.10",
     "style-loader": "3.2.1",
-    "supertest": "6.1.3",
+    "supertest": "6.1.4",
     "webpack": "5.45.1",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.7.2",
