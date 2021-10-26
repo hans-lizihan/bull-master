@@ -9423,10 +9423,10 @@ recharts-scale@^0.4.4:
   dependencies:
     decimal.js-light "^2.4.1"
 
-recharts@2.1.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.5.tgz#c6ada88d1a0da35fbae979f8ae252ec3a2a7df0e"
-  integrity sha512-DnKBqCtxPjny+nhgcglGYRLsdbRDjJkYcAA2Q0afvp5LDk9aaZos1vV5cOvnrbIFewINKI3q304VlXDPl4yXgg==
+recharts@2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.6.tgz#04b96233a30be27ae08a20795a980853397046ec"
+  integrity sha512-KnRNnCum1hL27DYhUfcdcKUEQkYnda6G+KDN4n/nCiTKp7UzJSgHfFHQvCkBujPi/U98dGd430DA2/8RJpkPlg==
   dependencies:
     "@types/d3-interpolate" "^2.0.0"
     "@types/d3-scale" "^3.0.0"
