@@ -47,7 +47,7 @@
     "redis-info": "^3.0.7"
   },
   "optionalDependencies": {
-    "bull": "^3.14.0",
+    "bull": "^4.0.0",
     "bullmq": "^1.19.2"
   },
   "devDependencies": {
