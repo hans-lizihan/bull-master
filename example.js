@@ -6,7 +6,8 @@ const bullMaster = require('./server/index');
 
 const app = express();
 
-const sleep = t => new Promise(resolve => setTimeout(resolve, t * 1000));
+// eslint-disable-next-line no-promise-executor-return
+const sleep = (t) => new Promise((resolve) => setTimeout(resolve, t * 1000));
 
 const redisOptions = {
   port: 6379,
@@ -15,15 +16,15 @@ const redisOptions = {
   tls: false,
 };
 
-const createQueue3 = name => new Queue3(name, { redis: redisOptions });
-const createQueueMQ = name => new QueueMQ(name, { connection: redisOptions });
+const createQueue3 = (name) => new Queue3(name, { redis: redisOptions });
+const createQueueMQ = (name) => new QueueMQ(name, { connection: redisOptions });
 
 const run = () => {
   const exampleBullName = 'ExampleBull';
   const exampleBull = createQueue3(exampleBullName);
   const exampleBullMqName = 'ExampleBullMQ';
   const exampleBullMq = createQueueMQ(exampleBullMqName);
-  exampleBull.process(async job => {
+  exampleBull.process(async (job) => {
     for (let i = 0; i <= 100; i += 1) {
       await sleep(Math.random());
       job.progress(i);
@@ -33,15 +34,21 @@ const run = () => {
   });
 
   // eslint-disable-next-line no-new
-  new Worker(exampleBullMqName, async job => {
-    for (let i = 0; i <= 100; i += 1) {
-      await sleep(Math.random());
-      await job.updateProgress(i);
-      await job.log(`logging for ${i}`);
+  new Worker(
+    exampleBullMqName,
+    async (job) => {
+      for (let i = 0; i <= 100; i += 1) {
+        await sleep(Math.random());
+        await job.updateProgress(i);
+        await job.log(`logging for ${i}`);
 
-      if (Math.random() * 200 < 1) throw new Error(`Random error ${i}`);
-    }
-  });
+        if (Math.random() * 200 < 1) throw new Error(`Random error ${i}`);
+      }
+    },
+    {
+      connection: redisOptions,
+    },
+  );
 
   app.use('/add', (req, res) => {
     const opts = req.query.opts || {};
