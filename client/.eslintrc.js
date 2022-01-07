@@ -1,5 +1,6 @@
+process.env.NODE_ENV = 'development';
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
 
   env: {
     browser: true,

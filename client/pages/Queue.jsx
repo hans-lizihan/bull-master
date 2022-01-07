@@ -32,7 +32,7 @@ const FIELDS = {
   waiting: ['id', 'name', 'attempts', 'timestamp', 'finishedOn', 'actions'],
 };
 
-const Queue = ({ match, history, location }) => {
+function Queue({ match, history, location }) {
   const { pathname } = location || {};
   const [queue, getQueue] = useResource(() => ({
     url: `/queues/${match.params.queueName}`,
@@ -327,7 +327,7 @@ const Queue = ({ match, history, location }) => {
       </Grid>
     </Grid>
   );
-};
+}
 
 Queue.propTypes = {
   match: PropTypes.shape({

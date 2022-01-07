@@ -50,7 +50,7 @@ const hasCount = (count) => {
   return true;
 };
 
-const Status = ({ status, count, ...rest }) => {
+function Status({ status, count, ...rest }) {
   const classes = useStyles();
 
   return (
@@ -70,7 +70,7 @@ const Status = ({ status, count, ...rest }) => {
       {...rest}
     />
   );
-};
+}
 
 Status.propTypes = {
   count: PropTypes.number,

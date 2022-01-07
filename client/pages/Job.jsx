@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Job = ({ match, history }) => {
+function Job({ match, history }) {
   const classes = useStyles();
   const [job, getJob] = useResource(({ jobId, queueName }) => ({
     url: `/queues/${queueName}/jobs/${jobId}`,
@@ -317,7 +317,7 @@ const Job = ({ match, history }) => {
       </Grid>
     </Grid>
   );
-};
+}
 
 Job.propTypes = {
   match: PropTypes.shape({

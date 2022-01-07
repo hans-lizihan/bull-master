@@ -77,7 +77,7 @@ const useToolbarStyles = makeStyles((theme) => ({
         },
 }));
 
-const EnhancedTableToolbar = ({ numSelected, title, actions, bulkActions }) => {
+function EnhancedTableToolbar({ numSelected, title, actions, bulkActions }) {
   const classes = useToolbarStyles();
   return (
     <Toolbar
@@ -97,7 +97,7 @@ const EnhancedTableToolbar = ({ numSelected, title, actions, bulkActions }) => {
       <div>{numSelected > 0 ? bulkActions : actions}</div>
     </Toolbar>
   );
-};
+}
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,

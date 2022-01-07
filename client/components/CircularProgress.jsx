@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CircularProgress = ({ value, size, ...rest }) => {
+function CircularProgress({ value, size, ...rest }) {
   const classes = useStyles();
   return (
     <div className={classes.root} style={{ height: size, width: size }}>
@@ -48,7 +48,7 @@ const CircularProgress = ({ value, size, ...rest }) => {
       <Typography className={classes.text}>{value}%</Typography>
     </div>
   );
-};
+}
 
 CircularProgress.propTypes = {
   value: PropTypes.number,

@@ -20,7 +20,7 @@ const getMemoryUsage = (usedMemory, totalSystemMemory) => {
   return `${((usedMemoryNumber / totalSystemMemoryNumber) * 100).toFixed(2)}%`;
 };
 
-const RedisStats = ({ stats }) => {
+function RedisStats({ stats }) {
   const {
     redisVersion,
     usedMemory,
@@ -90,7 +90,7 @@ const RedisStats = ({ stats }) => {
       </Grid>
     </Grid>
   );
-};
+}
 
 RedisStats.propTypes = {
   stats: PropTypes.shape({

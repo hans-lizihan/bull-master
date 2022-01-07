@@ -11,21 +11,23 @@ import Queue from './pages/Queue';
 import Job from './pages/Job';
 import theme from './theme';
 
-const App = ({ basePath }) => (
-  <ThemeProvider theme={theme}>
-    <RequestProvider value={client}>
-      <Router basename={basePath}>
-        <Layout>
-          <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/queues/:queueName" component={Queue} />
-            <Route exact path="/queues/:queueName/:jobId" component={Job} />
-          </Switch>
-        </Layout>
-      </Router>
-    </RequestProvider>
-  </ThemeProvider>
-);
+function App({ basePath }) {
+  return (
+    <ThemeProvider theme={theme}>
+      <RequestProvider value={client}>
+        <Router basename={basePath}>
+          <Layout>
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/queues/:queueName" component={Queue} />
+              <Route exact path="/queues/:queueName/:jobId" component={Job} />
+            </Switch>
+          </Layout>
+        </Router>
+      </RequestProvider>
+    </ThemeProvider>
+  );
+}
 
 App.propTypes = {
   basePath: PropTypes.string.isRequired,

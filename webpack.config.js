@@ -1,11 +1,10 @@
-const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
   mode: process.env.NODE_ENV,
   devtool:
     process.env.NODE_ENV === 'development'
-      ? 'cheap-module-eval-source-map'
+      ? 'eval-cheap-module-source-map'
       : false,
 
   entry: ['./client/index.jsx'],
@@ -13,18 +12,12 @@ module.exports = {
     filename: 'bundle.js',
   },
   devServer: {
-    hot: true,
-    quiet: false,
-    contentBase: path.join(__dirname, '../static'),
-    publicPath: '/ui/',
-    stats: {
-      colors: true,
-      modules: false,
+    devMiddleware: {
+      publicPath: '/ui/',
     },
-    watchOptions: {
-      ignored: /(node_modules)/,
+    client: {
+      logging: 'info',
     },
-    disableHostCheck: true,
     proxy: {
       '/': `http://localhost:${4889}`,
     },

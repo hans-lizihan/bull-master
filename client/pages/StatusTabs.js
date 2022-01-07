@@ -5,7 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import Status from '../components/Status';
 
-const StatusTabs = ({ counts, value, onChange }) => {
+function StatusTabs({ counts, value, onChange }) {
   const { active, completed, delayed, failed, paused, waiting } = counts || {};
   return (
     <AppBar position="static" color="default">
@@ -34,7 +34,7 @@ const StatusTabs = ({ counts, value, onChange }) => {
       </Tabs>
     </AppBar>
   );
-};
+}
 
 StatusTabs.propTypes = {
   onChange: PropTypes.func.isRequired,

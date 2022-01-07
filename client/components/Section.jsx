@@ -12,14 +12,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Section = ({ children, ...rest }) => {
+function Section({ children, ...rest }) {
   const classes = useStyles();
   return (
     <Paper className={classes.paper} {...rest}>
       {children}
     </Paper>
   );
-};
+}
 
 Section.propTypes = {
   children: PropTypes.node.isRequired,

@@ -82,7 +82,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Dashboard = () => {
+function Dashboard() {
   const classes = useStyles();
   const [stats, getStats] = useResource(() => ({
     url: '/redis-stats',
@@ -205,7 +205,7 @@ const Dashboard = () => {
       </Grid>
     </Grid>
   );
-};
+}
 
 Dashboard.propTypes = {};
 
