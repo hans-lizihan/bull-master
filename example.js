@@ -59,7 +59,13 @@ const run = () => {
         delay: delay * 1000,
       },
     );
-    exampleBullMq.add('Add', { title: req.query.title }, opts);
+    exampleBullMq.add(
+      'Add',
+      { title: req.query.title },
+      {
+        delay,
+      },
+    );
 
     res.json({
       ok: true,
