@@ -35,6 +35,9 @@ jobs:
           node-version: 14.x
       - run: yarn --pure-lockfile
       - run: yarn lint
+      - uses: wei/wget@v1
+        with:
+          args: -O node_modules/commitlint-plugin-gitmoji/lib/gitmoji.json https://raw.githubusercontent.com/carloscuesta/gitmoji/master/src/data/gitmojis.json
       - uses: wagoid/commitlint-github-action@v4
 
   ####### Unit tests
