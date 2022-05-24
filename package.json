@@ -78,7 +78,7 @@
     "eslint-plugin-react-hooks": "4.5.0",
     "husky": "7.0.4",
     "jest": "27.5.1",
-    "lint-staged": "12.4.1",
+    "lint-staged": "12.4.2",
     "nodemon": "2.0.16",
     "prettier": "2.6.2",
     "prettier-eslint": "13.0.0",
