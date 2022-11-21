@@ -48,7 +48,7 @@
   },
   "optionalDependencies": {
     "bull": "^4.2.0",
-    "bullmq": "^1.64.0"
+    "bullmq": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.19.6",
