@@ -65,7 +65,7 @@
     "clsx": "1.2.1",
     "commitlint-config-gitmoji": "2.2.6",
     "css-loader": "6.9.1",
-    "date-fns": "2.29.3",
+    "date-fns": "2.30.0",
     "enzyme": "3.11.0",
     "enzyme-to-json": "3.6.2",
     "eslint": "8.26.0",
