@@ -51,8 +51,8 @@
     "bullmq": "^1.64.0"
   },
   "devDependencies": {
-    "@babel/core": "7.23.7",
-    "@babel/eslint-parser": "7.23.3",
+    "@babel/core": "7.23.9",
+    "@babel/eslint-parser": "7.23.9",
     "@babel/plugin-proposal-optional-chaining": "7.21.0",
     "@commitlint/cli": "16.3.0",
     "@commitlint/core": "16.3.0",
