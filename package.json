@@ -91,7 +91,7 @@
     "react-router": "6.3.0",
     "react-router-dom": "6.3.0",
     "recharts": "2.1.15",
-    "style-loader": "3.3.3",
+    "style-loader": "3.3.4",
     "supertest": "6.3.3",
     "webpack": "5.76.0",
     "webpack-bundle-analyzer": "4.7.0",
