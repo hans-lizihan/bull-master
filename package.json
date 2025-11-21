@@ -58,7 +58,7 @@
     "@commitlint/core": "16.3.0",
     "@hot-loader/react-dom": "17.0.2",
     "@material-ui/core": "4.12.4",
-    "@material-ui/icons": "4.11.3",
+    "@mui/icons-material": "5.0.0",
     "axios": "0.30.2",
     "babel-loader": "8.4.1",
     "babel-preset-react-app": "10.1.0",
